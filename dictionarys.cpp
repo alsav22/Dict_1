@@ -14,15 +14,15 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 
 void Dictionarys::translate()
 {
-	QFile file("file.idx");
-	
-	if (file.open(QIODevice::ReadOnly))
+	QFile fileIn("file.idx");
+	QFile fileOut("out.txt");
+	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
-		QDataStream in(&file);
-		
+		QDataStream in(&fileIn);
+		QTextStream out(&fileOut); 
 		QString str;
-		
-		for (int i = 0; i < 300; ++i)
+		//int i = 1;
+		while (!in.atEnd())
 		{
 			char ch ;
 			if (in.readRawData(&ch, 1) == -1)
@@ -34,13 +34,13 @@ void Dictionarys::translate()
 				else
 				{
 					ui.textEdit ->append(str);
-					str.clear();
-				
 					quint32 n = 0;
 					quint32 m = 0;
 					in >> n >> m;
-					qDebug() << hex << n << "  " << m;
-					i += 7;
+					out << str << '\n' << n << " " << m << '\n'; 
+					str.clear();
+					//qDebug() << dec << i << " " << hex << n << "  " << m;
+					//++i;
 				}
 			}
 		}
