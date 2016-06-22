@@ -45,8 +45,8 @@ public:
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
         textEdit->setGeometry(QRect(310, 80, 326, 341));
         textEdit->setFont(font);
-        textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-        textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         textEdit->setReadOnly(true);
         label = new QLabel(DictionarysClass);
         label->setObjectName(QString::fromUtf8("label"));
