@@ -7,9 +7,28 @@
 #include <fstream>
 
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
-	: QWidget(parent, flags)
+	: QWidget(parent, flags), fileIfo("file.ifo"), fileIdx("file.idx"), fileDict("file.dict")
 {
 	ui.setupUi(this);
+	
+}
+
+bool Dictionarys::parsingIdx()
+{
+	
+	return true;
+}
+
+bool Dictionarys::createHash()
+{
+	
+	return true;
+}
+
+bool Dictionarys::loadHash()
+{
+	
+	return true;
 }
 
 void Dictionarys::translate()
