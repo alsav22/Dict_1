@@ -9,15 +9,50 @@
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags), fileIfo("file.ifo"), 
 	  fileIdx("file.idx"), fileDict("file.dict"), 
-	  fileParseIdx("parseIdx.txt"), fileHash("Hash.txt")
+	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), fileHash("Hash.txt")
 {
 	ui.setupUi(this);
+	
+	if (!loadData())
+	{
+		qDebug() << "Error loadData()!";
+		//return;
+	}
+}
+
+bool Dictionarys::loadData()
+{
+	if (!QDir::current().exists(fileParseIfo))
+    if (!parsingIfo())
+	{
+		qDebug() << "Error parsingIfo()!";
+		return false;
+	}
 	if (!QDir::current().exists(fileParseIdx))
-		parsingIdx();
-	else if (!QDir::current().exists(fileHash))
-		createHash();
-	else
-		loadHash();
+    if (!parsingIdx())
+	{
+		qDebug() << "Error parsingIdx()!";
+		return false;
+	}
+	if (!QDir::current().exists(fileHash))
+    if (!createHash())
+	{
+		qDebug() << "Error createHash()!";
+		return false;
+	}
+	
+	if (!loadHash())
+	{
+		qDebug() << "Error loadHash()!";
+		return false;
+	}
+	return true;
+}
+
+bool Dictionarys::parsingIfo()
+{
+	
+	return true;
 }
 
 bool Dictionarys::parsingIdx()

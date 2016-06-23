@@ -12,8 +12,10 @@ public:
 	Dictionarys(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Dictionarys();
 	bool parsingIdx();
+	bool parsingIfo();
 	bool createHash();
 	bool loadHash();
+	bool loadData();
 
 private:
 	Ui::DictionarysClass ui;
@@ -25,6 +27,7 @@ private:
 	QString fileDict;
 	QString fileHash;
 	QString fileParseIdx;
+	QString fileParseIfo;
 	
 public slots:
 		void translate();
