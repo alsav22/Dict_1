@@ -175,7 +175,31 @@ bool Dictionarys::loadHash()
 
 void Dictionarys::translate()
 {
+	QString word((ui.lineEdit ->text()).trimmed().toLower());
 	
+	QString offset;
+	QString size;
+	if (!word.isEmpty())
+	{
+		if (mHash.contains(word))
+		{
+			offset = QString::number(mHash.value(word).first);
+			size   = QString::number(mHash.value(word).second);
+
+			ui.textEdit ->clear();
+			ui.textEdit ->setText(word + '\n' + offset + '\n' + size);
+		}
+		else
+		{
+			ui.textEdit ->clear();
+			ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
+		}
+	}
+	else
+	{
+		ui.textEdit ->clear();
+		ui.textEdit ->setText(QWidget::tr("Введите слово!"));
+	}
 			
 
 	//	
