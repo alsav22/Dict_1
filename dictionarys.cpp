@@ -11,12 +11,13 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	  fileIdx("file.idx"), fileDict("file.dict"), 
 	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), 
 	  fileHash("Hash.txt"), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
-	  wordcount(0), idxfilesize(0), offset(0), size(0)
+	  wordcount(0), idxfilesize(0), offset(0), size(0), dict(nullptr), streamDict(nullptr)
 {
 	ui.setupUi(this);
 	
 	if (!loadData())
 	{
+		
 		qDebug() << "Error loadData()!";
 		//return;
 	}
@@ -48,6 +49,14 @@ bool Dictionarys::loadData()
 		qDebug() << "Error loadHash()!";
 		return false;
 	}
+	dict = new QFile(fileDict, this);
+	if (!dict ->open(QIODevice::ReadOnly))
+	{
+		qDebug() << "Error opening " << fileDict << " !";
+		return false;
+	}
+	streamDict = new QDataStream(dict);
+	streamDict ->setVersion(QDataStream::Qt_4_8);
 	return true;
 }
 
@@ -186,7 +195,15 @@ void Dictionarys::translate()
 			size   = pair.second;
 
 			ui.textEdit ->clear();
-			ui.textEdit ->setText(word + '\n' + QString::number(offset) + '\n' + QString::number(size));
+			//ui.textEdit ->setText(word + '\n' + QString::number(offset) + '\n' + QString::number(size));
+			char* buffer = new char[size + 1];
+			dict ->seek(0);
+			dict ->seek(offset);
+			//streamDict ->skipRawData(offset);
+			dict ->read(buffer, size);
+			buffer[size] = '\0';
+			ui.textEdit ->setText(QString::fromUtf8(buffer));
+			delete buffer;
 		}
 		else
 		{
@@ -228,5 +245,5 @@ void Dictionarys::translate()
 
 Dictionarys::~Dictionarys()
 {
-
+	delete streamDict;
 }

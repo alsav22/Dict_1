@@ -1,7 +1,7 @@
 #ifndef DICTIONARYS_H
 #define DICTIONARYS_H
 
-#include <QtGui/QWidget>
+#include <QtGui>
 #include "ui_dictionarys.h"
 
 class Dictionarys : public QWidget
@@ -33,6 +33,9 @@ private:
 	quint32 size;   // под размер записи
 	quint32 wordcount; // количество слов в словаре
 	quint32 idxfilesize; // размер файла .idx
+
+	QFile* dict;
+	QDataStream* streamDict;
 	
 public slots:
 		void translate();
