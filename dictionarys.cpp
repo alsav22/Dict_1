@@ -112,12 +112,12 @@ bool Dictionarys::parsingIdx()
 				else
 				{
 					ui.textEdit ->append(str);
-					quint32 n = 0;
-					quint32 m = 0;
-					in >> n >> m;
-					out << str << '\n' << n << " " << m << '\n'; 
+					quint32 offset = 0;
+					quint32 size   = 0;
+					in >> offset >> size;
+					out << str << '\n' << offset << " " << size << '\n'; 
 					str.clear();
-					//qDebug() << dec << i << " " << hex << n << "  " << m;
+					//qDebug() << dec << i << " " << hex << offset << "  " << size;
 					//++i;
 				}
 			}
@@ -125,7 +125,7 @@ bool Dictionarys::parsingIdx()
 	}
 	else
 	{
-		qDebug() << "Error!";
+		qDebug() << "Error parsingIdx()!";
 		return false;
 	}
 	return true;
@@ -133,14 +133,44 @@ bool Dictionarys::parsingIdx()
 
 bool Dictionarys::createHash()
 {
-	
-	return true;
+	QFile fileIn(fileParseIdx);
+	QFile fileOut(fileHash);
+	if (fileIn.open(QIODevice::ReadOnly | QIODevice::Text) && fileOut.open(QIODevice::WriteOnly))
+	{
+		QTextStream in(&fileIn); 
+		QString str;
+		quint32 offset = 0;
+		quint32 size   = 0;
+		while (true)
+		{
+			str = in.readLine();
+			if (in.atEnd())
+				break;
+			in >> offset;
+			in >> size;
+
+			mHash.insert(str, qMakePair(offset, size));
+		}
+		
+		QDataStream out(&fileOut);
+		out << mHash;
+	    return true;
+	}
+	qDebug() << "Error createHash()!";
+	return false;
 }
 
 bool Dictionarys::loadHash()
 {
-	
-	return true;
+	QFile fileIn(fileHash);
+	if (fileIn.open(QIODevice::ReadOnly))
+	{
+		QDataStream in(&fileIn);
+		in >> mHash;
+		return true;
+	}
+	qDebug() << "Error loadHash()!";
+	return false;
 }
 
 void Dictionarys::translate()

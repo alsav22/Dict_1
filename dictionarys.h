@@ -20,7 +20,6 @@ public:
 private:
 	Ui::DictionarysClass ui;
 	
-	QPair <quint32, quint32> mPair;
 	QHash <QString, QPair <quint32, quint32> > mHash;
 	QString fileIfo;
 	QString fileIdx;
