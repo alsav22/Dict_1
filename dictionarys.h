@@ -34,8 +34,7 @@ private:
 	quint32 wordcount; // количество слов в словаре
 	quint32 idxfilesize; // размер файла .idx
 
-	QFile* dict;
-	QDataStream* streamDict;
+	QFile* mpFileDict;
 	
 public slots:
 		void translate();
