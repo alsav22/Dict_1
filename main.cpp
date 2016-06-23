@@ -1,7 +1,12 @@
 #include <QtGui>
 #include "dictionarys.h"
 #include <QtGui/QApplication>
+
+
+#ifdef QT_DEBUG
+#include <vld.h>
 #include <Windows.h>
+#endif
 
 int main(int argc, char *argv[])
 {

@@ -9,7 +9,9 @@
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags), fileIfo("file.ifo"), 
 	  fileIdx("file.idx"), fileDict("file.dict"), 
-	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), fileHash("Hash.txt")
+	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), 
+	  fileHash("Hash.txt"), ifoExtractOne("wordcount"), ifoExtractTwo("idxfilesize"),
+	  wordcount(0), idxfilesize(0)
 {
 	ui.setupUi(this);
 	
@@ -51,8 +53,38 @@ bool Dictionarys::loadData()
 
 bool Dictionarys::parsingIfo()
 {
+	QFile fileIn(fileIfo);
+	QFile fileOut(fileParseIfo);
+	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		QTextStream in(&fileIn);
+		QTextStream out(&fileOut); 
+		QString str;
+		QString number;
+		while (true)
+		{
+			str = in.readLine();
+			if (in.atEnd())
+				break;
+			if (str.startsWith(ifoExtractOne))
+			{
+				number = str.mid(ifoExtractOne.size() + 1);
+				wordcount = number.toUInt();
+				out << wordcount << endl;
+			}
+			if (str.startsWith(ifoExtractTwo))
+			{
+				number = str.mid(ifoExtractTwo.size() + 1);
+				idxfilesize = number.toUInt();
+				out << idxfilesize << endl;
+			}
+		}
+		if (wordcount != 0 && idxfilesize != 0)
+			return true;
+	}
 	
-	return true;
+	qDebug() << "Error parsingIfo()!";
+	return false;
 }
 
 bool Dictionarys::parsingIdx()

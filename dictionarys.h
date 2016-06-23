@@ -28,6 +28,11 @@ private:
 	QString fileHash;
 	QString fileParseIdx;
 	QString fileParseIfo;
+	QString ifoExtractOne;
+	QString ifoExtractTwo;
+
+	quint32 wordcount; // количество слов в словаре
+	quint32 idxfilesize; // размер файла .idx
 	
 public slots:
 		void translate();

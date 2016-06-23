@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>"..\..\..\Programs\Qt\4.8.5\include\QtCore";"..\..\..\Programs\Qt\4.8.5\include\QtGui";"..\..\..\Programs\Qt\4.8.5\include";".";"..\..\..\Programs\Qt\4.8.5\include\ActiveQt";"debug";".";..\..\..\Programs\Qt\4.8.5\mkspecs\win32-msvc2010;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\Programs\Qt\4.8.5\include\QtCore;..\..\..\Programs\Qt\4.8.5\include\QtGui;..\..\..\Programs\Qt\4.8.5\include;.;..\..\..\Programs\Qt\4.8.5\include\ActiveQt;debug;..\..\..\Programs\Qt\4.8.5\mkspecs\win32-msvc2010;C:\Program Files (x86)\Visual Leak Detector\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -72,8 +72,8 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>d:\Programs\Qt\4.8.5\lib\qtmaind.lib;d:\Programs\Qt\4.8.5\lib\QtGuid4.lib;d:\Programs\Qt\4.8.5\lib\QtCored4.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>d:\Programs\Qt\4.8.5\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>d:\Programs\Qt\4.8.5\lib\qtmaind.lib;d:\Programs\Qt\4.8.5\lib\QtGuid4.lib;d:\Programs\Qt\4.8.5\lib\QtCored4.lib;vld.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>d:\Programs\Qt\4.8.5\lib;C:\Program Files (x86)\Visual Leak Detector\lib\Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
