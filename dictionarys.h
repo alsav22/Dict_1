@@ -27,9 +27,10 @@ private:
 	QString fileHash;
 	QString fileParseIdx;
 	QString fileParseIfo;
-	QString ifoExtractOne;
-	QString ifoExtractTwo;
-
+	QString ifoWordcount;   // первое поле из .ifo
+	QString ifoIdxfilesize; // второе поле из .ifo
+    quint32 offset; // под размер смещения
+	quint32 size;   // под размер записи
 	quint32 wordcount; // количество слов в словаре
 	quint32 idxfilesize; // размер файла .idx
 	

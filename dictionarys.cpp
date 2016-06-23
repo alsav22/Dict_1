@@ -10,8 +10,8 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags), fileIfo("file.ifo"), 
 	  fileIdx("file.idx"), fileDict("file.dict"), 
 	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), 
-	  fileHash("Hash.txt"), ifoExtractOne("wordcount"), ifoExtractTwo("idxfilesize"),
-	  wordcount(0), idxfilesize(0)
+	  fileHash("Hash.txt"), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
+	  wordcount(0), idxfilesize(0), offset(0), size(0)
 {
 	ui.setupUi(this);
 	
@@ -66,15 +66,15 @@ bool Dictionarys::parsingIfo()
 			str = in.readLine();
 			if (in.atEnd())
 				break;
-			if (str.startsWith(ifoExtractOne))
+			if (str.startsWith(ifoWordcount))
 			{
-				number = str.mid(ifoExtractOne.size() + 1);
+				number = str.mid(ifoWordcount.size() + 1);
 				wordcount = number.toUInt();
 				out << wordcount << endl;
 			}
-			if (str.startsWith(ifoExtractTwo))
+			if (str.startsWith(ifoIdxfilesize))
 			{
-				number = str.mid(ifoExtractTwo.size() + 1);
+				number = str.mid(ifoIdxfilesize.size() + 1);
 				idxfilesize = number.toUInt();
 				out << idxfilesize << endl;
 			}
@@ -112,8 +112,6 @@ bool Dictionarys::parsingIdx()
 				else
 				{
 					ui.textEdit ->append(str);
-					quint32 offset = 0;
-					quint32 size   = 0;
 					in >> offset >> size;
 					out << str << '\n' << offset << " " << size << '\n'; 
 					str.clear();
@@ -139,8 +137,8 @@ bool Dictionarys::createHash()
 	{
 		QTextStream in(&fileIn); 
 		QString str;
-		quint32 offset = 0;
-		quint32 size   = 0;
+		offset = 0;
+		size   = 0;
 		while (true)
 		{
 			str = in.readLine();
@@ -177,17 +175,18 @@ void Dictionarys::translate()
 {
 	QString word((ui.lineEdit ->text()).trimmed().toLower());
 	
-	QString offset;
-	QString size;
+	offset = 0;
+	size = 0;
 	if (!word.isEmpty())
 	{
 		if (mHash.contains(word))
 		{
-			offset = QString::number(mHash.value(word).first);
-			size   = QString::number(mHash.value(word).second);
+			QPair <quint32, quint32> pair(mHash.value(word));
+			offset = pair.first;
+			size   = pair.second;
 
 			ui.textEdit ->clear();
-			ui.textEdit ->setText(word + '\n' + offset + '\n' + size);
+			ui.textEdit ->setText(word + '\n' + QString::number(offset) + '\n' + QString::number(size));
 		}
 		else
 		{
