@@ -35,6 +35,7 @@ private:
 	quint32 idxfilesize; // נאחלונ פאיכא .idx
 
 	QFile* mpFileDict;
+	QFont* mpFont;
 	
 public slots:
 		void translate();

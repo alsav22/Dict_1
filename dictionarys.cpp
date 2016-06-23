@@ -11,9 +11,13 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	  fileIdx("file.idx"), fileDict("file.dict"), 
 	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), 
 	  fileHash("Hash.txt"), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
-	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
+	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr), mpFont(nullptr)
 {
 	ui.setupUi(this);
+	/*mpFont = new QFont("DejaVuSans.ttf");
+	mpFont ->setPointSize(11);
+	ui.textEdit ->setFont(*mpFont);
+	qDebug() << ui.textEdit ->font().family();*/
 	
 	if (!loadData())
 	{
@@ -241,5 +245,5 @@ void Dictionarys::translate()
 
 Dictionarys::~Dictionarys()
 {
-	
+	delete mpFont;
 }
