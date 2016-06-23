@@ -23,8 +23,10 @@ private:
 	QString fileIfo;
 	QString fileIdx;
 	QString fileDict;
-
-	public slots:
+	QString fileHash;
+	QString fileParseIdx;
+	
+public slots:
 		void translate();
 };
 

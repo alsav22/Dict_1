@@ -7,34 +7,23 @@
 #include <fstream>
 
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
-	: QWidget(parent, flags), fileIfo("file.ifo"), fileIdx("file.idx"), fileDict("file.dict")
+	: QWidget(parent, flags), fileIfo("file.ifo"), 
+	  fileIdx("file.idx"), fileDict("file.dict"), 
+	  fileParseIdx("parseIdx.txt"), fileHash("Hash.txt")
 {
 	ui.setupUi(this);
-	
+	if (!QDir::current().exists(fileParseIdx))
+		parsingIdx();
+	else if (!QDir::current().exists(fileHash))
+		createHash();
+	else
+		loadHash();
 }
 
 bool Dictionarys::parsingIdx()
 {
-	
-	return true;
-}
-
-bool Dictionarys::createHash()
-{
-	
-	return true;
-}
-
-bool Dictionarys::loadHash()
-{
-	
-	return true;
-}
-
-void Dictionarys::translate()
-{
-	QFile fileIn("file.idx");
-	QFile fileOut("out.txt");
+	QFile fileIn(fileIdx);
+	QFile fileOut(fileParseIdx);
 	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		QDataStream in(&fileIn);
@@ -45,7 +34,10 @@ void Dictionarys::translate()
 		{
 			char ch ;
 			if (in.readRawData(&ch, 1) == -1)
+			{
 				qDebug() << QWidget::tr("Ошибка чтения!");
+				return false;
+			}
 			else
 			{
 				if (ch)
@@ -63,6 +55,30 @@ void Dictionarys::translate()
 				}
 			}
 		}
+	}
+	else
+	{
+		qDebug() << "Error!";
+		return false;
+	}
+	return true;
+}
+
+bool Dictionarys::createHash()
+{
+	
+	return true;
+}
+
+bool Dictionarys::loadHash()
+{
+	
+	return true;
+}
+
+void Dictionarys::translate()
+{
+	
 			
 
 	//	
@@ -86,9 +102,7 @@ void Dictionarys::translate()
 	////	qDebug() << reg6.cap(3);
 	////	qDebug() << reg6.cap(2) + reg6.cap(3);*/
 	////}
-	}
-	else
-		qDebug() << "Error!";
+	
 
 }
 
