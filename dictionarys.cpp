@@ -24,7 +24,34 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 		qDebug() << "Error loadData()!";
 		//return;
 	}
+	//getTagForDict(this);
 }
+
+void getTagForDict(Dictionarys* p)
+{
+	QString str;
+	QStringList strList;
+	QRegExp reg("(<[a-z]+ */>)");
+	//QRegExp reg("(&[a-z0-9]+;)");
+	QString tag;
+	int pos;
+	while (true)
+	{
+		str = p ->mpFileDict ->readLine();
+		if (p ->mpFileDict ->atEnd())
+			break;
+		if ((pos = reg.indexIn(str)) > -1)
+		{
+			tag = reg.cap(0);
+			if (!strList.contains(tag))
+			{
+				strList << tag;
+			}
+		}
+	}
+	qDebug() << strList;
+}
+
 
 bool Dictionarys::loadData()
 {
@@ -65,7 +92,7 @@ bool Dictionarys::parsingIfo()
 {
 	QFile fileIn(fileIfo);
 	QFile fileOut(fileParseIfo);
-	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
+	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly/* | QIODevice::Text*/))
 	{
 		QTextStream in(&fileIn);
 		QTextStream out(&fileOut); 
@@ -101,10 +128,10 @@ bool Dictionarys::parsingIdx()
 {
 	QFile fileIn(fileIdx);
 	QFile fileOut(fileParseIdx);
-	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
+	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly/* | QIODevice::Text*/))
 	{
 		QDataStream in(&fileIn);
-		QTextStream out(&fileOut); 
+		QDataStream out(&fileOut); 
 		QString str;
 		//int i = 1;
 		while (!in.atEnd())
@@ -123,7 +150,8 @@ bool Dictionarys::parsingIdx()
 				{
 					ui.textEdit ->append(str);
 					in >> offset >> size;
-					out << str << '\n' << offset << " " << size << '\n'; 
+					//out << str << '\n' << offset << " " << size << '\n'; 
+					out << str << offset << size; 
 					str.clear();
 					//qDebug() << dec << i << " " << hex << offset << "  " << size;
 					//++i;
@@ -143,15 +171,17 @@ bool Dictionarys::createHash()
 {
 	QFile fileIn(fileParseIdx);
 	QFile fileOut(fileHash);
-	if (fileIn.open(QIODevice::ReadOnly | QIODevice::Text) && fileOut.open(QIODevice::WriteOnly))
+	if (fileIn.open(QIODevice::ReadOnly/* | QIODevice::Text*/) && fileOut.open(QIODevice::WriteOnly))
 	{
-		QTextStream in(&fileIn); 
+		QDataStream in(&fileIn); 
 		QString str;
 		offset = 0;
 		size   = 0;
+		
 		while (true)
 		{
-			str = in.readLine();
+			in >> str;
+			//qDebug() << str;
 			if (in.atEnd())
 				break;
 			in >> offset;
@@ -161,6 +191,7 @@ bool Dictionarys::createHash()
 		}
 		
 		QDataStream out(&fileOut);
+		//qDebug() << mHash.value("-ate").first;
 		out << mHash;
 	    return true;
 	}
@@ -202,7 +233,18 @@ void Dictionarys::translate()
 			buffer[size] = '\0';
 			
 			ui.textEdit ->clear();
-			ui.textEdit ->setText(QString::fromUtf8(buffer));
+			QString temp = QString::fromUtf8(buffer);
+			//temp.remove(QRegExp("<k>|</k>"));
+			
+			temp.replace("<tr>", "[");
+			temp.replace("</tr>", "]\n");
+			temp.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
+			temp.replace("&apos;", "'");
+			temp.replace("&quot;", "\"");
+			temp.replace("&amp;", "&");
+			//temp.remove(QRegExp("(<.+>)|(</.+>)"));
+
+			ui.textEdit ->setText(temp);
 			delete buffer;
 		}
 		else
@@ -245,5 +287,6 @@ void Dictionarys::translate()
 
 Dictionarys::~Dictionarys()
 {
+	mpFileDict ->close();
 	delete mpFont;
 }

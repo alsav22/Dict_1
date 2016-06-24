@@ -17,6 +17,8 @@ public:
 	bool loadHash();
 	bool loadData();
 
+	friend void getTagForDict(Dictionarys* p);
+
 private:
 	Ui::DictionarysClass ui;
 	
