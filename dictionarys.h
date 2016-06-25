@@ -16,6 +16,8 @@ public:
 	bool createHash();
 	bool loadHash();
 	bool loadData();
+	void HTMLfromString(QString& str);
+	void preparationString(QString& str);
 
 private:
 	Ui::DictionarysClass ui;

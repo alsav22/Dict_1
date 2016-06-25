@@ -14,7 +14,7 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr), mpFont(nullptr)
 {
 	ui.setupUi(this);
-	/*mpFont = new QFont("DejaVuSans.ttf");
+	/*mpFont = new QFont("MTFONT.TTF");
 	mpFont ->setPointSize(11);
 	ui.textEdit ->setFont(*mpFont);
 	qDebug() << ui.textEdit ->font().family();*/
@@ -182,6 +182,33 @@ bool Dictionarys::loadHash()
 	return false;
 }
 
+void Dictionarys::preparationString(QString& str)
+{
+	str.replace("<tr>", "[");
+	str.replace("</tr>", "]");
+	qDebug() << str;
+	
+	//str.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
+	//str.replace("<k>", "<b>");
+	//str.replace("</k>", "</b>");
+	//str.replace("&apos;", "'");
+	//str.replace("&quot;", "\"");
+	//str.replace("&amp;", "&");
+	
+	HTMLfromString(str);
+}
+
+void Dictionarys::HTMLfromString(QString& str)
+{
+	QString begin("<html><head>");
+	QString style("<style type=text/css>"
+		          "k {font-weight: bold}"
+				  //"tr {font-size: 5}"
+				  "i {color: blue}");
+	QString end("</style></head><body>" + str + "</body></html>");
+	str = begin + style + end;
+}
+
 void Dictionarys::translate()
 {
 	QString word((ui.lineEdit ->text()).trimmed().toLower());
@@ -202,19 +229,12 @@ void Dictionarys::translate()
 			mpFileDict ->read(buffer, size);
 			buffer[size] = '\0';
 			
-			ui.textEdit ->clear();
+			QString translation = QString::fromUtf8(buffer);
 			
-			QString temp = QString::fromUtf8(buffer);
-			temp.replace("<tr>", "[");
-			temp.replace("</tr>", "]\n");
-#ifndef QT_DEBUG		
-			temp.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
-			temp.replace("&apos;", "'");
-			temp.replace("&quot;", "\"");
-			temp.replace("&amp;", "&");
-			ui.textEdit ->setText(temp);
-#endif
-			ui.textEdit ->setText(temp);
+			preparationString(translation);
+			
+			ui.textEdit ->clear();
+			ui.textEdit ->setText(translation);
 
 			delete buffer;
 		}

@@ -38,11 +38,14 @@ int main(int argc, char *argv[])
 	SetConsoleOutputCP(1251);
 #endif
 	
-	QApplication a(argc, argv);
+	QApplication app(argc, argv);
 
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
 	Dictionarys w;
+	
+	QObject::connect(&w, SIGNAL(destroyed()), &app, SLOT(quit()));
+	
 	w.show();
-	return a.exec();
+	return app.exec();
 }
