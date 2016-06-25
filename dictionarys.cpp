@@ -201,6 +201,13 @@ void Dictionarys::translate()
 			mpFileDict ->read(buffer, size);
 			buffer[size] = '\0';
 			
+			temp.replace("<tr>", "[");
+			temp.replace("</tr>", "]\n");
+			temp.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
+			temp.replace("&apos;", "'");
+			temp.replace("&quot;", "\"");
+			temp.replace("&amp;", "&");
+			
 			ui.textEdit ->clear();
 			ui.textEdit ->setText(QString::fromUtf8(buffer));
 			delete buffer;
