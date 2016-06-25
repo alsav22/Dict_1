@@ -33,8 +33,10 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef QT_DEBUG
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
+#endif
 	
 	QApplication a(argc, argv);
 

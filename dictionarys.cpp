@@ -201,18 +201,21 @@ void Dictionarys::translate()
 			mpFileDict ->seek(offset);
 			mpFileDict ->read(buffer, size);
 			buffer[size] = '\0';
+			
 			ui.textEdit ->clear();
-#ifndef QT_DEBUG		
+			
 			QString temp = QString::fromUtf8(buffer);
 			temp.replace("<tr>", "[");
 			temp.replace("</tr>", "]\n");
+#ifndef QT_DEBUG		
 			temp.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
 			temp.replace("&apos;", "'");
 			temp.replace("&quot;", "\"");
 			temp.replace("&amp;", "&");
 			ui.textEdit ->setText(temp);
 #endif
-			ui.textEdit ->setText(QString::fromUtf8(buffer));
+			ui.textEdit ->setText(temp);
+
 			delete buffer;
 		}
 		else
