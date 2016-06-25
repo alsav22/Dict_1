@@ -40,8 +40,8 @@
    </property>
    <property name="font">
     <font>
-     <family>Lucida Sans Unicode</family>
-     <pointsize>10</pointsize>
+     <family>Arial</family>
+     <pointsize>11</pointsize>
     </font>
    </property>
    <property name="verticalScrollBarPolicy">

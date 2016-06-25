@@ -154,6 +154,7 @@ bool Dictionarys::createHash()
 			str = in.readLine();
 			if (in.atEnd())
 				break;
+			//qDebug() << str;
 			in >> offset;
 			in >> size;
 			in.read(1); // пропуск символа(ов) новой строки перед readLine()
@@ -184,9 +185,9 @@ bool Dictionarys::loadHash()
 
 void Dictionarys::preparationString(QString& str)
 {
-	str.replace("<tr>", "[");
-	str.replace("</tr>", "]");
-	qDebug() << str;
+	str.replace("<tr>", "<t>[");
+	str.replace("</tr>", "]</t>");
+	//qDebug() << str;
 	
 	//str.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
 	//str.replace("<k>", "<b>");
@@ -203,7 +204,7 @@ void Dictionarys::HTMLfromString(QString& str)
 	QString begin("<html><head>");
 	QString style("<style type=text/css>"
 		          "k {font-weight: bold}"
-				  //"tr {font-size: 5}"
+				  "t {font-size: 5; color: green; font-family: \"Lucida Sans Unicode\"}"
 				  "i {color: blue}");
 	QString end("</style></head><body>" + str + "</body></html>");
 	str = begin + style + end;
@@ -241,7 +242,8 @@ void Dictionarys::translate()
 		else
 		{
 			ui.textEdit ->clear();
-			ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
+			//ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
+			ui.textEdit ->setText("<html><body><r>Not found!</r>&amp; Not!</body></html>");
 		}
 	}
 	else
