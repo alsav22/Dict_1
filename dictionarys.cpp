@@ -65,8 +65,7 @@ void getTagForDict(Dictionarys* p)
 {
 	QString str;
 	QStringList strList;
-	QRegExp reg("(<[a-z]+\\s?/></[a-z]+>)");
-	//QRegExp reg("(&[a-z0-9]+;)");
+	QRegExp reg("(</?[a-z]+\\s?/?>)");
 	QString tag;
 	int pos;
 	while (true)
@@ -75,17 +74,17 @@ void getTagForDict(Dictionarys* p)
 		//qDebug() << str;
 		if (p ->mpFileDict ->atEnd())
 			break;
-		if ((pos = reg.indexIn(str)) > -1)
+		pos = 0;
+		while ((pos = reg.indexIn(str, pos)) != -1)
 		{
 			tag = reg.cap(0);
 			if (!strList.contains(tag))
 			{
 				strList << tag;
 				qDebug() << tag;
-				//if (tag == "<opt>" || tag == "</opt>")
-					//qDebug() << "!!!";
-				//p ->ui.textEdit ->append(tag);
+				p ->ui.textEdit ->append(tag);
 			}
+			pos += reg.matchedLength();
 		}
 	}
 	
@@ -215,9 +214,13 @@ bool Dictionarys::loadHash()
 
 void Dictionarys::preparationString(QString& str)
 {
-	str.replace("<tr>", "<t>[");
+	str.replace("\n<tr>", " <t>[");
 	str.replace("</tr>", "]</t>");
-	//qDebug() << str;
+	str.replace("\n", "<br />");
+	//str.replace("<kref>", "<a>");
+	//str.replace("</kref>", "</a>");
+	str.remove(QRegExp("<rref>.+</rref>"));
+	qDebug() << str;
 	
 	//str.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
 	//str.replace("<k>", "<b>");
@@ -234,7 +237,8 @@ void Dictionarys::HTMLfromString(QString& str)
 	QString begin("<html><head>");
 	QString style("<style type=text/css>"
 		          "k {font-weight: bold}"
-				  "t {font-size: 5; color: green; font-family: \"Lucida Sans Unicode\"}"
+				  "kref {font-weight: bold; font-style: oblique}"
+				  "t {font-size: 5; font-family: \"Lucida Sans Unicode\"}"
 				  "i {color: blue}");
 	QString end("</style></head><body>" + str + "</body></html>");
 	str = begin + style + end;

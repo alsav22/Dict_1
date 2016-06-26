@@ -33,7 +33,7 @@ public:
     {
         if (DictionarysClass->objectName().isEmpty())
             DictionarysClass->setObjectName(QString::fromUtf8("DictionarysClass"));
-        DictionarysClass->resize(676, 456);
+        DictionarysClass->resize(775, 456);
         lineEdit = new QLineEdit(DictionarysClass);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
         lineEdit->setGeometry(QRect(35, 79, 231, 36));
@@ -43,7 +43,7 @@ public:
         lineEdit->setFont(font);
         textEdit = new QTextEdit(DictionarysClass);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
-        textEdit->setGeometry(QRect(310, 80, 326, 341));
+        textEdit->setGeometry(QRect(310, 80, 421, 341));
         textEdit->setFont(font);
         textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
