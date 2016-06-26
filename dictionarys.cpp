@@ -24,6 +24,7 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 		qDebug() << "Error loadData()!";
 		//return;
 	}
+	getTagForDict(this);
 }
 
 bool Dictionarys::loadData()
@@ -57,8 +58,37 @@ bool Dictionarys::loadData()
 		qDebug() << "Error opening " << fileDict << " !";
 		return false;
 	}
-	
 	return true;
+}
+
+void getTagForDict(Dictionarys* p)
+{
+	QString str;
+	QStringList strList;
+	QRegExp reg("(<[a-z]+\\s?/></[a-z]+>)");
+	//QRegExp reg("(&[a-z0-9]+;)");
+	QString tag;
+	int pos;
+	while (true)
+	{
+		str = p ->mpFileDict ->readLine();
+		//qDebug() << str;
+		if (p ->mpFileDict ->atEnd())
+			break;
+		if ((pos = reg.indexIn(str)) > -1)
+		{
+			tag = reg.cap(0);
+			if (!strList.contains(tag))
+			{
+				strList << tag;
+				qDebug() << tag;
+				//if (tag == "<opt>" || tag == "</opt>")
+					//qDebug() << "!!!";
+				//p ->ui.textEdit ->append(tag);
+			}
+		}
+	}
+	
 }
 
 bool Dictionarys::parsingIfo()

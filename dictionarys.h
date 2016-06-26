@@ -19,6 +19,8 @@ public:
 	void HTMLfromString(QString& str);
 	void preparationString(QString& str);
 
+	friend void getTagForDict(Dictionarys* p);
+
 private:
 	Ui::DictionarysClass ui;
 	
