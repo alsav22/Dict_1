@@ -24,7 +24,7 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 		qDebug() << "Error loadData()!";
 		//return;
 	}
-	getTagForDict(this);
+	//getTagForDict(this);
 }
 
 bool Dictionarys::loadData()
@@ -71,7 +71,6 @@ void getTagForDict(Dictionarys* p)
 	while (true)
 	{
 		str = p ->mpFileDict ->readLine();
-		//qDebug() << str;
 		if (p ->mpFileDict ->atEnd())
 			break;
 		pos = 0;
@@ -82,7 +81,6 @@ void getTagForDict(Dictionarys* p)
 			{
 				strList << tag;
 				qDebug() << tag;
-				p ->ui.textEdit ->append(tag);
 			}
 			pos += reg.matchedLength();
 		}
@@ -217,17 +215,22 @@ void Dictionarys::preparationString(QString& str)
 	str.replace("\n<tr>", " <t>[");
 	str.replace("</tr>", "]</t>");
 	str.replace("\n", "<br />");
-	//str.replace("<kref>", "<a>");
-	//str.replace("</kref>", "</a>");
-	str.remove(QRegExp("<rref>.+</rref>"));
-	qDebug() << str;
 	
-	//str.remove(QRegExp("(<[a-z]+>)|(</[a-z]+>)|(<[a-z]+ */>)"));
-	//str.replace("<k>", "<b>");
-	//str.replace("</k>", "</b>");
-	//str.replace("&apos;", "'");
-	//str.replace("&quot;", "\"");
-	//str.replace("&amp;", "&");
+	str.replace("<iref>", "<a>");
+	str.replace("</iref>", "</a>");
+	str.replace("web-site:", "<br />web-site:");
+	str.remove(QRegExp("<rref>.+</rref>"));
+	
+	QRegExp reg("<a>(.+)</a>");
+	QString href;
+	int pos = 0;
+	while ((pos = reg.indexIn(str, pos)) != -1)
+	{
+		href = reg.cap(1);
+		str.replace(pos + 2, href.size() + 1, " href=\"" + href + "\">" + href);
+		pos += reg.matchedLength();
+	}
+	qDebug() << str;
 	
 	HTMLfromString(str);
 }
@@ -246,7 +249,7 @@ void Dictionarys::HTMLfromString(QString& str)
 
 void Dictionarys::translate()
 {
-	QString word((ui.lineEdit ->text()).trimmed().toLower());
+	QString word((ui.lineEdit ->text()).trimmed());
 	
 	offset = 0;
 	size = 0;
@@ -276,8 +279,7 @@ void Dictionarys::translate()
 		else
 		{
 			ui.textEdit ->clear();
-			//ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
-			ui.textEdit ->setText("<html><body><r>Not found!</r>&amp; Not!</body></html>");
+			ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
 		}
 	}
 	else
