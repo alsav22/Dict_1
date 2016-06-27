@@ -161,6 +161,7 @@
     <ClCompile Include="release\qrc_dictionarys.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClInclude Include="GVariables.h" />
     <ClInclude Include="ui_dictionarys.h" />
   </ItemGroup>
   <ItemGroup>

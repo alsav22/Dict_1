@@ -46,3 +46,5 @@ public slots:
 };
 
 #endif // DICTIONARYS_H
+
+
