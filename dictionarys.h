@@ -11,6 +11,8 @@ class Dictionarys : public QWidget
 public:
 	Dictionarys(QWidget *parent = 0, Qt::WFlags flags = 0);
 	~Dictionarys();
+	
+	void setNameFiles();
 	bool parsingIdx();
 	bool parsingIfo();
 	bool createHash();
@@ -25,6 +27,7 @@ private:
 	Ui::DictionarysClass ui;
 	
 	QHash <QString, QPair <quint32, quint32> > mHash;
+	QString dirDict; // папка словаря
 	QString fileIfo;
 	QString fileIdx;
 	QString fileDict;

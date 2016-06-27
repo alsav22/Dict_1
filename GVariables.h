@@ -3,12 +3,20 @@
 #include <QtGui>
 #include <QtCore>
 
+//"stardict-ER-LingvoUniversal-2.4.2"
+//"stardict-lingvo-ER-Biology-2.4.2"
+//"stardict-lingvo-ER-Computer-2.4.2"
+//"stardict-lingvo-ER-Informal-2.4.2"
+//"stardict-lingvo-ER-Medical-2.4.2"
+//"stardict-lingvo-ER-Polytechnical-2.4.2"
+
+
 class GlobalVariables
 {
 public:
-	const QString FILE_NAME;   // имя файла, в котором записан путь к папке со звуковыми файлами
-	      QString PATH_SOUND;  // путь к папке со звуковыми файлами
-	const QString FILTER;
+	const QString dirDict; // папка словаря
+	const QString tr; // направление перевода
+	QStringList dicts; // имена словарей (папок)      
 	
 	static GlobalVariables& getGlobalVariables() 
 	{
@@ -17,10 +25,11 @@ public:
 	}
 
 private:
-	GlobalVariables() : FILE_NAME("Path_Sound.txt"),
-		                PATH_SOUND("")
+	GlobalVariables() : tr("ER")
 	{ 
-		
+		dicts << "stardict-ER-LingvoUniversal-2.4.2" << "stardict-lingvo-ER-Informal-2.4.2"
+			  << "stardict-lingvo-ER-Computer-2.4.2" << "stardict-lingvo-ER-Polytechnical-2.4.2"
+			  << "stardict-lingvo-ER-Biology-2.4.2"  << "stardict-lingvo-ER-Medical-2.4.2";
 			
 	}
 

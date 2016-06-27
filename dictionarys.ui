@@ -104,7 +104,7 @@
    <property name="title">
     <string>Словари</string>
    </property>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QCheckBox" name="checkBox_0">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -119,8 +119,11 @@
     <property name="text">
      <string>Общей лексики</string>
     </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
     <property name="tristate">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_2">
@@ -135,6 +138,9 @@
     <property name="text">
      <string>Компьютерный</string>
     </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_3">
     <property name="geometry">
@@ -147,6 +153,9 @@
     </property>
     <property name="text">
      <string>Политехнический</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_4">
@@ -161,8 +170,11 @@
     <property name="text">
      <string>Биологический</string>
     </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_5">
+   <widget class="QCheckBox" name="checkBox_1">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -174,8 +186,11 @@
     <property name="text">
      <string>Разговорной лексики</string>
     </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_6">
+   <widget class="QCheckBox" name="checkBox_5">
     <property name="geometry">
      <rect>
       <x>15</x>
@@ -186,6 +201,9 @@
     </property>
     <property name="text">
      <string>Медицинский</string>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
     </property>
    </widget>
   </widget>

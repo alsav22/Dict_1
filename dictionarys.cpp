@@ -5,15 +5,15 @@
 #include <string>
 #include <sstream>
 #include <fstream>
+#include "GVariables.h"
 
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
-	: QWidget(parent, flags), fileIfo("file.ifo"), 
-	  fileIdx("file.idx"), fileDict("file.dict"), 
-	  fileParseIfo("parseIfo.txt"), fileParseIdx("parseIdx.txt"), 
-	  fileHash("Hash.txt"), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
+	: QWidget(parent, flags), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr), mpFont(nullptr)
 {
 	ui.setupUi(this);
+	ui.checkBox_0 ->setChecked(true);
+	
 	/*mpFont = new QFont("MTFONT.TTF");
 	mpFont ->setPointSize(11);
 	ui.textEdit ->setFont(*mpFont);
@@ -27,8 +27,37 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	//getTagForDict(this);
 }
 
+void Dictionarys::setNameFiles()
+{
+	if (ui.checkBox_0 ->isChecked())
+		dirDict = GlobalVariables::getGlobalVariables().dicts[0];
+	if (ui.checkBox_1 ->isChecked())
+		dirDict = GlobalVariables::getGlobalVariables().dicts[1];
+	if (ui.checkBox_2 ->isChecked())
+		dirDict = GlobalVariables::getGlobalVariables().dicts[2];
+	if (ui.checkBox_3 ->isChecked())
+		dirDict = GlobalVariables::getGlobalVariables().dicts[3];
+	if (ui.checkBox_4 ->isChecked())
+		dirDict = GlobalVariables::getGlobalVariables().dicts[4];
+	if (ui.checkBox_5 ->isChecked())
+		dirDict = GlobalVariables::getGlobalVariables().dicts[5];
+
+	QString beginName = dirDict.mid(dirDict.indexOf(GlobalVariables::getGlobalVariables().tr));
+	beginName.truncate(beginName.lastIndexOf('-'));
+	QString path = dirDict + "/" + beginName;
+	fileIfo  = path + ".ifo"; 
+	fileIdx  = path + ".idx";
+	fileDict = path + ".dict"; 
+	fileHash = dirDict + "/" + "Hash.txt";
+	fileParseIfo = dirDict + "/" + "parseIfo.txt";
+	fileParseIdx = dirDict + "/" + "parseIdx.txt";
+	
+}
+
 bool Dictionarys::loadData()
 {
+	setNameFiles();
+	
 	if (!QFile::exists(fileParseIfo))
     if (!parsingIfo())
 	{
