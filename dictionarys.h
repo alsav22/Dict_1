@@ -19,7 +19,9 @@ public:
 	bool loadHash();
 	bool loadData();
 	void HTMLfromString(QString& str);
-	void preparationString(QString& str);
+	void formattingTr(QString& str);
+	QString getTr(const QString& word);
+	void outputTr(QString& translation);
 
 	friend void getTagForDict(Dictionarys* p);
 
@@ -42,7 +44,6 @@ private:
 	quint32 idxfilesize; // נאחלונ פאיכא .idx
 
 	QFile* mpFileDict;
-	QFont* mpFont;
 	
 public slots:
 		void translate();

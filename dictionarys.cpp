@@ -9,15 +9,10 @@
 
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
-	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr), mpFont(nullptr)
+	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
 {
 	ui.setupUi(this);
 	ui.checkBox_0 ->setChecked(true);
-	
-	/*mpFont = new QFont("MTFONT.TTF");
-	mpFont ->setPointSize(11);
-	ui.textEdit ->setFont(*mpFont);
-	qDebug() << ui.textEdit ->font().family();*/
 	
 	if (!loadData())
 	{
@@ -94,26 +89,44 @@ void getTagForDict(Dictionarys* p)
 {
 	QString str;
 	QStringList strList;
-	QRegExp reg("(</?[a-z]+\\s?/?>)");
+	//QRegExp reg("(</?[a-z]+\\s?/?>)");
+	QRegExp reg("(<k>.+</k>\\n ?<(?!tr))");
 	QString tag;
 	int pos;
-	while (true)
+
+	QFile fileIn(p ->fileParseIdx);
+	
+	if (fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		str = p ->mpFileDict ->readLine();
-		if (p ->mpFileDict ->atEnd())
-			break;
-		pos = 0;
-		while ((pos = reg.indexIn(str, pos)) != -1)
+		QTextStream in(&fileIn);
+		int i;
+		QString temp;
+		while (true)
 		{
-			tag = reg.cap(0);
-			if (!strList.contains(tag))
+			temp = in.readLine();
+			in >> i >> i;
+			in.read(1);
+			str = p ->mpFileDict ->read(i);
+			//str = p ->mpFileDict ->readLine();
+			if (p ->mpFileDict ->atEnd())
+				break;
+			pos = 0;
+			while ((pos = reg.indexIn(str, pos)) != -1)
 			{
-				strList << tag;
-				qDebug() << tag;
+				
+				tag = reg.cap(0);
+				//p ->ui.textEdit ->setText(tag);
+				if (!strList.contains(tag))
+				{
+					strList << tag;
+					//qDebug() << tag;
+				}
+				pos += reg.matchedLength();
 			}
-			pos += reg.matchedLength();
 		}
 	}
+	foreach(QString s, strList)
+		p ->ui.textEdit ->append(s);//setText(s);
 	
 }
 
@@ -153,6 +166,9 @@ bool Dictionarys::parsingIfo()
 	return false;
 }
 
+// из .idx файла формируетс€ файл формата: строка с именем слова дл€ перевода, 
+// следующа€ строка - два числа через пробел: смещение дл€ первода в файле .dict и
+// размер перевода в файле .dict
 bool Dictionarys::parsingIdx()
 {
 	QFile fileIn(fileIdx);
@@ -162,13 +178,13 @@ bool Dictionarys::parsingIdx()
 		QDataStream in(&fileIn);
 		QTextStream out(&fileOut); 
 		QString str;
-		//int i = 1;
+		
 		while (!in.atEnd())
 		{
 			char ch ;
 			if (in.readRawData(&ch, 1) == -1)
 			{
-				qDebug() << QWidget::tr("ќшибка чтени€!");
+				qDebug() << QWidget::tr("ќшибка чтени€ из .idx!");
 				return false;
 			}
 			else
@@ -177,12 +193,10 @@ bool Dictionarys::parsingIdx()
 					str += ch;
 				else
 				{
-					ui.textEdit ->append(str);
+					//ui.textEdit ->append(str);
 					in >> offset >> size;
 					out << str << '\n' << offset << " " << size << '\n'; 
 					str.clear();
-					//qDebug() << dec << i << " " << hex << offset << "  " << size;
-					//++i;
 				}
 			}
 		}
@@ -195,6 +209,7 @@ bool Dictionarys::parsingIdx()
 	return true;
 }
 
+// —оздание и запись в файл хеша из данных в .idx: ключ - слово дл€ перевода, значение - пара из смещени€ и размера первода в .dict
 bool Dictionarys::createHash()
 {
 	QFile fileIn(fileParseIdx);
@@ -225,7 +240,7 @@ bool Dictionarys::createHash()
 	qDebug() << "Error createHash()!";
 	return false;
 }
-
+// загрузка хеша с данными из .idx
 bool Dictionarys::loadHash()
 {
 	QFile fileIn(fileHash);
@@ -239,17 +254,21 @@ bool Dictionarys::loadHash()
 	return false;
 }
 
-void Dictionarys::preparationString(QString& str)
+// форматирование перевода
+void Dictionarys::formattingTr(QString& str)
 {
-	str.replace("\n<tr>", " <t>[");
-	str.replace("</tr>", "]</t>");
-	str.replace("\n", "<br />");
+	str.replace(QRegExp("\n<tr>"), "<tr>"); // транскрипци€ без переноса на следующую строку
+	str.replace("<tr>", " <t>[");  // тег <tr> мен€етс€ на <t>, иначе, при переводе в html,
+	str.replace("</tr>", "]</t>"); // этот текст вырезаетс€; транскрипцию в [], 
+	str.replace("\n", "<br />"); // 0x0A мен€етс€ на тег новой строки
+	str.remove(QRegExp("<rref>.+</rref>")); // ссылки на ресурсы удал€ютс€
 	
+	// тег интернет-ссылки мен€етс€ на тег html-гиперссылки
 	str.replace("<iref>", "<a>");
 	str.replace("</iref>", "</a>");
-	str.replace("web-site:", "<br />web-site:");
-	str.remove(QRegExp("<rref>.+</rref>"));
+	str.replace("web-site:", "<br />web-site:"); // "web-site:" с новой строки
 	
+	// создание из интернет-ссылки html-гиперссылки
 	QRegExp reg("<a>(.+)</a>");
 	QString href;
 	int pos = 0;
@@ -261,9 +280,10 @@ void Dictionarys::preparationString(QString& str)
 	}
 	qDebug() << str;
 	
-	HTMLfromString(str);
+	HTMLfromString(str); // в html-текст (с CSS)
 }
 
+// из QString в HTML-текст (задание стилей CSS)
 void Dictionarys::HTMLfromString(QString& str)
 {
 	QString begin("<html><head>");
@@ -276,74 +296,54 @@ void Dictionarys::HTMLfromString(QString& str)
 	str = begin + style + end;
 }
 
-void Dictionarys::translate()
+// получение первода из .dict
+QString Dictionarys::getTr(const QString& word)
 {
-	QString word((ui.lineEdit ->text()).trimmed());
-	
 	offset = 0;
 	size = 0;
+	QString translation = "";
 	if (!word.isEmpty())
 	{
 		if (mHash.contains(word))
 		{
-			QPair <quint32, quint32> pair(mHash.value(word));
+			QPair <quint32, quint32> pair(mHash.value(word)); // получение смещени€ и размера из хеша
 			offset = pair.first;
 			size   = pair.second;
 			
-			char* buffer = new char[size + 1];
+			char* buffer = new char[size + 1]; // буфер под первод
 			mpFileDict ->seek(0);
-			mpFileDict ->seek(offset);
-			mpFileDict ->read(buffer, size);
+			mpFileDict ->seek(offset); // переход к переводу
+			mpFileDict ->read(buffer, size); // чтение перевода
 			buffer[size] = '\0';
 			
-			QString translation = QString::fromUtf8(buffer);
-			
-			preparationString(translation);
-			
-			ui.textEdit ->clear();
-			ui.textEdit ->setText(translation);
-
+			translation = QString::fromUtf8(buffer); // первод в QString из UTF-8
 			delete buffer;
-		}
-		else
-		{
-			ui.textEdit ->clear();
-			ui.textEdit ->setText(QWidget::tr("—лово не найдено!"));
-		}
-	}
-	else
-	{
-		ui.textEdit ->clear();
-		ui.textEdit ->setText(QWidget::tr("¬ведите слово!"));
-	}
 			
+			formattingTr(translation); // форматирование перевода
+		}
+	}
+	return translation;
+}
 
-	//	
-	//	char ch = 'a';
-	////
-	////QString word(ui.lineEdit ->text());
+// слот дл€ получени€ перевода
+void Dictionarys::translate()
+{
+	QString word((ui.lineEdit ->text()).trimmed());
+	QString translation = getTr(word);
+	outputTr(translation);
+}
 
-	////QRegExp reg5("<ar>.*<k>(.+)</k>.*(?:<tr>.+</tr>)(.+)</ar>");
-	////int pos;
-	////QString en;
-	////QString ru;
-	////if ((pos = reg5.indexIn(str)) > -1)
-	////{
-	////	en = reg5.cap(1);
-	////	qDebug() << en.trimmed();
-	////	ru = reg5.cap(2);
-	////	qDebug() << ru.trimmed();
-	////	//qDebug() << reg6.cap(0);
-	////	//qDebug() << reg6.cap(1);
-	////	/*qDebug() << reg6.cap(2);
-	////	qDebug() << reg6.cap(3);
-	////	qDebug() << reg6.cap(2) + reg6.cap(3);*/
-	////}
-	
-
+// вывод перевода
+void Dictionarys::outputTr(QString& translation)
+{
+	ui.textEdit ->clear();
+	if (!translation.isEmpty())
+		ui.textEdit ->setText(translation);
+	else
+		ui.textEdit ->setText(QWidget::tr("—лово не найдено!"));
 }
 
 Dictionarys::~Dictionarys()
 {
-	delete mpFont;
+	//delete mpFont;
 }
