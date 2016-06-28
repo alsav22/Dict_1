@@ -43,6 +43,7 @@ public:
         if (DictionarysClass->objectName().isEmpty())
             DictionarysClass->setObjectName(QString::fromUtf8("DictionarysClass"));
         DictionarysClass->resize(775, 456);
+        DictionarysClass->setFocusPolicy(Qt::NoFocus);
         lineEdit = new QLineEdit(DictionarysClass);
         lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
         lineEdit->setGeometry(QRect(35, 79, 231, 36));

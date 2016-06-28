@@ -7,6 +7,17 @@
 #include <fstream>
 #include "GVariables.h"
 
+#ifdef Q_OS_LINUX
+#include <stdlib.h>
+#include <X11/Xlib.h>
+#include <X11/XKBlib.h>
+#endif
+
+#ifdef Q_OS_WIN32
+#include <Windows.h>
+#include <string>
+#endif
+
 Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
@@ -273,7 +284,7 @@ void Dictionarys::formattingTr(QString& str)
 	str.replace("</tr>", "]</t>"); // этот текст вырезаетс€; транскрипцию в [], 
 	str.replace("\n", "<br />"); // 0x0A мен€етс€ на тег новой строки
 	str.remove(QRegExp("<rref>.+</rref>")); // ссылки на ресурсы удал€ютс€
-	
+	//str.replace("<c>", "<font color=\"red\">"); так можно задать цвет 
 	// тег интернет-ссылки мен€етс€ на тег html-гиперссылки
 	str.replace("<iref>", "<a>");
 	str.replace("</iref>", "</a>");
@@ -302,7 +313,7 @@ void Dictionarys::HTMLfromString(QString& str)
 		          "k {font-weight: bold}"
 				  "kref {font-weight: bold; font-style: oblique}"
 				  "t {font-size: 5; font-family: \"Lucida Sans Unicode\"}"
-				  "i {color: blue}");
+				  "c {color: blue}");
 	QString end("</style></head><body>" + str + "</body></html>");
 	str = begin + style + end;
 }
@@ -353,6 +364,44 @@ void Dictionarys::outputTr(QString& translation)
 	else
 		ui.textEdit ->setText(QWidget::tr("—лово не найдено!"));
 }
+
+// ѕереключение на английский ввод при активном окне
+bool Dictionarys::event(QEvent* pe) 
+{
+	if (pe ->type() == QEvent::WindowActivate)
+	{
+#ifdef Q_OS_WIN32
+		
+			qDebug() << "define Q_OS_WIN32";
+			PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, 1, 0x04090409);
+			// LoadKeyboardLayout(L"00000409", KLF_ACTIVATE); // или так
+#endif
+
+#ifdef Q_OS_LINUX
+#ifdef DEBUG
+qDebug() << "define Q_OS_LINUX";
+#endif
+			
+			int xkbGroup = 0;
+            int event_rtrn, error_rtrn, reason_rtrn;
+            Display* display = XkbOpenDisplay(NULL, &event_rtrn, &error_rtrn,
+                                              NULL, NULL, &reason_rtrn       );
+            if(display == NULL)
+            {
+                #ifdef DEBUG
+				qDebug() << "Cannot open display!";
+                #endif
+                return QWidget::event(pe);
+            }
+            XkbLockGroup(display, XkbUseCoreKbd, xkbGroup);
+            XCloseDisplay(display);
+#endif
+	
+	}
+	return QWidget::event(pe);
+	
+}
+
 
 Dictionarys::~Dictionarys()
 {

@@ -82,6 +82,7 @@
       <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <SubSystem>NotSet</SubSystem>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <Profile>true</Profile>
     </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>

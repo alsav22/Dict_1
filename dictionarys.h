@@ -23,6 +23,9 @@ public:
 	QString getTr(const QString& word);
 	void outputTr(QString& translation);
 
+protected:
+	bool Dictionarys::event(QEvent* pe); // переключение на английский ввод при активном окне
+
 	friend void getTagForDict(Dictionarys* p);
 
 private:
