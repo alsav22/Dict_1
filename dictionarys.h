@@ -30,9 +30,9 @@ private:
 	
 	QHash <QString, QPair <quint32, quint32> > mHash;
 	QString dirDict; // папка словаря
-	QString fileIfo;
-	QString fileIdx;
-	QString fileDict;
+	QString fileIfo; // имя файла словаря .ifo
+	QString fileIdx; // имя файла словаря .idx
+	QString fileDict; // имя файла словаря .dict
 	QString fileHash;
 	QString fileParseIdx;
 	QString fileParseIfo;
@@ -43,7 +43,7 @@ private:
 	quint32 wordcount; // количество слов в словаре
 	quint32 idxfilesize; // размер файла .idx
 
-	QFile* mpFileDict;
+	QFile* mpFileDict; // объект для работы с файлом словаря .dict
 	
 public slots:
 		void translate();

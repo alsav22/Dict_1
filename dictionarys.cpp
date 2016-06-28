@@ -24,6 +24,7 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 
 void Dictionarys::setNameFiles()
 {
+	// выбор папки со словарём
 	if (ui.checkBox_0 ->isChecked())
 		dirDict = GlobalVariables::getGlobalVariables().dicts[0];
 	if (ui.checkBox_1 ->isChecked())
@@ -37,16 +38,26 @@ void Dictionarys::setNameFiles()
 	if (ui.checkBox_5 ->isChecked())
 		dirDict = GlobalVariables::getGlobalVariables().dicts[5];
 
-	QString beginName = dirDict.mid(dirDict.indexOf(GlobalVariables::getGlobalVariables().tr));
-	beginName.truncate(beginName.lastIndexOf('-'));
-	QString path = dirDict + "/" + beginName;
-	fileIfo  = path + ".ifo"; 
-	fileIdx  = path + ".idx";
-	fileDict = path + ".dict"; 
-	fileHash = dirDict + "/" + "Hash.txt";
+	QDir dir(dirDict);
+	QStringList list = dir.entryList(QDir::Files | QDir::NoDotAndDotDot); // список файлов из папки со словарём
+    
+	// переменным, с именами файлов словаря, устанавливаются имена файлов, с нужным расширением, из папки словаря 
+	if (!list.empty())
+	{
+		foreach(QString s, list)
+		{
+			if (s.endsWith(".dict"))
+				fileDict = dirDict + "/" + s;
+	        else if (s.endsWith(".idx"))
+				fileIdx  = dirDict + "/" + s;
+			else if (s.endsWith(".ifo"))
+				fileIfo  = dirDict + "/" + s;
+		}
+	}
+	
+	fileHash     = dirDict + "/" + "Hash.txt";
 	fileParseIfo = dirDict + "/" + "parseIfo.txt";
 	fileParseIdx = dirDict + "/" + "parseIdx.txt";
-	
 }
 
 bool Dictionarys::loadData()

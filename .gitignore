@@ -284,3 +284,22 @@ stardict-lingvo-ER-Polytechnical-2.4.2/ER-Polytechnical.dict
 stardict-lingvo-ER-Polytechnical-2.4.2/ER-Polytechnical.idx
 stardict-lingvo-ER-Polytechnical-2.4.2/ER-Polytechnical.ifo
 stardict-lingvo-ER-Computer-2.4.2/ER-Computer.dict
+Пример кода (StarDict)/Books/123455.txt
+Пример кода (StarDict)/Frequency/__init__.py
+Пример кода (StarDict)/Frequency/FrequencyDict.py
+Пример кода (StarDict)/Frequency/IniParser.py
+Пример кода (StarDict)/main.py
+Пример кода (StarDict)/Settings.ini
+Пример кода (StarDict)/StarDict/__init__.py
+Пример кода (StarDict)/StarDict/BaseStarDictItem.py
+Пример кода (StarDict)/StarDict/Dict.py
+Пример кода (StarDict)/StarDict/Idx.py
+Пример кода (StarDict)/StarDict/Ifo.py
+Пример кода (StarDict)/StarDict/StarDict.py
+Пример кода (StarDict)/WordNet/__init__.py
+Пример кода (StarDict)/WordNet/BaseWordNetItem.py
+Пример кода (StarDict)/WordNet/Lemmatizer.py
+Пример кода (StarDict)/WordNet/WordNetAdjective.py
+Пример кода (StarDict)/WordNet/WordNetAdverb.py
+Пример кода (StarDict)/WordNet/WordNetNoun.py
+Пример кода (StarDict)/WordNet/WordNetVerb.py
