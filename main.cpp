@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
-	Dictionarys w;
+	Dictionary w;
 	
 	QObject::connect(&w, SIGNAL(destroyed()), &app, SLOT(quit()));
 	

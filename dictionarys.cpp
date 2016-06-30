@@ -18,7 +18,7 @@
 #include <string>
 #endif
 
-Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
+Dictionary::Dictionary(QWidget *parent, Qt::WFlags flags)
 	: QWidget(parent, flags), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
 {
@@ -33,7 +33,7 @@ Dictionarys::Dictionarys(QWidget *parent, Qt::WFlags flags)
 	//getTagForDict(this);
 }
 
-void Dictionarys::setNameFiles()
+void Dictionary::setNameFiles()
 {
 	// выбор папки со словарём
 	if (ui.checkBox_0 ->isChecked())
@@ -71,7 +71,7 @@ void Dictionarys::setNameFiles()
 	fileParseIdx = dirDict + "/" + "parseIdx.txt";
 }
 
-bool Dictionarys::loadData()
+bool Dictionary::loadData()
 {
 	setNameFiles();
 	
@@ -107,7 +107,7 @@ bool Dictionarys::loadData()
 	return true;
 }
 
-void getTagForDict(Dictionarys* p)
+void getTagForDict(Dictionary* p)
 {
 	QString str;
 	QStringList strList;
@@ -152,7 +152,7 @@ void getTagForDict(Dictionarys* p)
 	
 }
 
-bool Dictionarys::parsingIfo()
+bool Dictionary::parsingIfo()
 {
 	QFile fileIn(fileIfo);
 	QFile fileOut(fileParseIfo);
@@ -191,7 +191,7 @@ bool Dictionarys::parsingIfo()
 // из .idx файла формируется файл формата: строка с именем слова для перевода, 
 // следующая строка - два числа через пробел: смещение для первода в файле .dict и
 // размер перевода в файле .dict
-bool Dictionarys::parsingIdx()
+bool Dictionary::parsingIdx()
 {
 	QFile fileIn(fileIdx);
 	QFile fileOut(fileParseIdx);
@@ -232,7 +232,7 @@ bool Dictionarys::parsingIdx()
 }
 
 // Создание и запись в файл хеша из данных в .idx: ключ - слово для перевода, значение - пара из смещения и размера первода в .dict
-bool Dictionarys::createHash()
+bool Dictionary::createHash()
 {
 	QFile fileIn(fileParseIdx);
 	QFile fileOut(fileHash);
@@ -263,7 +263,7 @@ bool Dictionarys::createHash()
 	return false;
 }
 // загрузка хеша с данными из .idx
-bool Dictionarys::loadHash()
+bool Dictionary::loadHash()
 {
 	QFile fileIn(fileHash);
 	if (fileIn.open(QIODevice::ReadOnly))
@@ -277,7 +277,7 @@ bool Dictionarys::loadHash()
 }
 
 // форматирование перевода
-void Dictionarys::formattingTr(QString& str)
+void Dictionary::formattingTr(QString& str)
 {
 	str.replace(QRegExp("\n<tr>"), "<tr>"); // транскрипция без переноса на следующую строку
 	str.replace("<tr>", " <t>[");  // тег <tr> меняется на <t>, иначе, при переводе в html,
@@ -306,7 +306,7 @@ void Dictionarys::formattingTr(QString& str)
 }
 
 // из QString в HTML-текст (задание стилей CSS)
-void Dictionarys::HTMLfromString(QString& str)
+void Dictionary::HTMLfromString(QString& str)
 {
 	QString begin("<html><head>");
 	QString style("<style type=text/css>"
@@ -319,7 +319,7 @@ void Dictionarys::HTMLfromString(QString& str)
 }
 
 // получение первода из .dict
-QString Dictionarys::getTr(const QString& word)
+QString Dictionary::getTr(const QString& word)
 {
 	offset = 0;
 	size = 0;
@@ -348,7 +348,7 @@ QString Dictionarys::getTr(const QString& word)
 }
 
 // слот для получения перевода
-void Dictionarys::translate()
+void Dictionary::translate()
 {
 	QString word((ui.lineEdit ->text()).trimmed());
 	QString translation = getTr(word);
@@ -356,7 +356,7 @@ void Dictionarys::translate()
 }
 
 // вывод перевода
-void Dictionarys::outputTr(QString& translation)
+void Dictionary::outputTr(QString& translation)
 {
 	ui.textEdit ->clear();
 	if (!translation.isEmpty())
@@ -366,7 +366,7 @@ void Dictionarys::outputTr(QString& translation)
 }
 
 // Переключение на английский ввод при активном окне
-bool Dictionarys::event(QEvent* pe) 
+bool Dictionary::event(QEvent* pe) 
 {
 	if (pe ->type() == QEvent::WindowActivate)
 	{
@@ -403,7 +403,7 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 
-Dictionarys::~Dictionarys()
+Dictionary::~Dictionary()
 {
 	//delete mpFont;
 }

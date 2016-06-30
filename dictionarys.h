@@ -1,16 +1,16 @@
-#ifndef DICTIONARYS_H
-#define DICTIONARYS_H
+#ifndef DICTIONARY_H
+#define DICTIONARY_H
 
 #include <QtGui>
 #include "ui_dictionarys.h"
 
-class Dictionarys : public QWidget
+class Dictionary : public QWidget
 {
 	Q_OBJECT
 
 public:
-	Dictionarys(QWidget *parent = 0, Qt::WFlags flags = 0);
-	~Dictionarys();
+	Dictionary(QWidget *parent = 0, Qt::WFlags flags = 0);
+	~Dictionary();
 	
 	void setNameFiles();
 	bool parsingIdx();
@@ -24,9 +24,9 @@ public:
 	void outputTr(QString& translation);
 
 protected:
-	bool Dictionarys::event(QEvent* pe); // переключение на английский ввод при активном окне
+	bool Dictionary::event(QEvent* pe); // переключение на английский ввод при активном окне
 
-	friend void getTagForDict(Dictionarys* p);
+	friend void getTagForDict(Dictionary* p);
 
 private:
 	Ui::DictionarysClass ui;
@@ -52,6 +52,6 @@ public slots:
 		void translate();
 };
 
-#endif // DICTIONARYS_H
+#endif // DICTIONARY_H
 
 
