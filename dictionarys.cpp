@@ -1,4 +1,4 @@
-#include "dictionarys.h"
+#include "dictionary.h"
 #include <QDebug>
 #include <qregexp.h>
 #include <QtGui>

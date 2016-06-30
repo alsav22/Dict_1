@@ -55,11 +55,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="dictionarys.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="debug\moc_dictionarys.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
@@ -79,6 +74,9 @@
   <ItemGroup>
     <CustomBuild Include="dictionarys.ui">
       <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="dictionary.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

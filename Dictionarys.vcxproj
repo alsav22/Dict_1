@@ -138,10 +138,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="dictionarys.h">
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe;dictionarys.h;%(AdditionalInputs)</AdditionalInputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe  -DUNICODE -DWIN32 -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I"..\..\..\Programs\Qt\4.8.5\include\QtCore" -I"..\..\..\Programs\Qt\4.8.5\include\QtGui" -I"..\..\..\Programs\Qt\4.8.5\include" -I"." -I"..\..\..\Programs\Qt\4.8.5\include\ActiveQt" -I"debug" -I"." -I..\..\..\Programs\Qt\4.8.5\mkspecs\win32-msvc2010 -D_MSC_VER=1600 -DWIN32 dictionarys.h -o debug\moc_dictionarys.cpp</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC dictionarys.h</Message>
+    <CustomBuild Include="dictionary.h">
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe;dictionary.h;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe  -DUNICODE -DWIN32 -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I"..\..\..\Programs\Qt\4.8.5\include\QtCore" -I"..\..\..\Programs\Qt\4.8.5\include\QtGui" -I"..\..\..\Programs\Qt\4.8.5\include" -I"." -I"..\..\..\Programs\Qt\4.8.5\include\ActiveQt" -I"debug" -I"." -I..\..\..\Programs\Qt\4.8.5\mkspecs\win32-msvc2010 -D_MSC_VER=1600 -DWIN32 dictionary.h -o debug\moc_dictionarys.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC dictionary.h</Message>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_dictionarys.cpp;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe;dictionarys.h;%(AdditionalInputs)</AdditionalInputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe  -DUNICODE -DWIN32 -DQT_DLL -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I"..\..\..\Programs\Qt\4.8.5\include\QtCore" -I"..\..\..\Programs\Qt\4.8.5\include\QtGui" -I"..\..\..\Programs\Qt\4.8.5\include" -I"." -I"..\..\..\Programs\Qt\4.8.5\include\ActiveQt" -I"release" -I"." -I..\..\..\Programs\Qt\4.8.5\mkspecs\win32-msvc2010 -D_MSC_VER=1600 -DWIN32 dictionarys.h -o release\moc_dictionarys.cpp</Command>

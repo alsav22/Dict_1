@@ -1,8 +1,8 @@
-#ifndef Dictionary_H
-#define Dictionary_H
+#ifndef DICTIONARY_H
+#define DICTIONARY_H
 
 #include <QtGui>
-#include "ui_Dictionary.h"
+#include "ui_dictionarys.h"
 
 class Dictionary : public QWidget
 {
@@ -29,7 +29,7 @@ protected:
 	friend void getTagForDict(Dictionary* p);
 
 private:
-	//Ui::DictionaryClass ui;
+	Ui::DictionarysClass ui;
 	
 	QHash <QString, QPair <quint32, quint32> > mHash;
 	QString dirDict; // папка словаря
@@ -52,6 +52,6 @@ public slots:
 		void translate();
 };
 
-#endif // Dictionary_H
+#endif // DICTIONARY_H
 
 

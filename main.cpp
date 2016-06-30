@@ -42,7 +42,7 @@
 // Также quint32: wordcount (количество слов в словаре), и idxfilesize (размер файла .idx)
 
 #include <QtGui>
-#include "dictionarys.h"
+#include "dictionary.h"
 #include <QtGui/QApplication>
 
 #ifdef QT_DEBUG
