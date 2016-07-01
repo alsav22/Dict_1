@@ -9,18 +9,19 @@ class Dictionary
 	//friend class DictProgram;
 
 public:
-	Dictionary(const QString& dirName);
+	Dictionary(const QString& dirName, const QString name);
 	~Dictionary();
 	
-	void setNameFiles();
-	bool parsingIdx();
-	bool parsingIfo();
-	bool createHash();
-	bool loadHash();
-	bool loadData();
-	void HTMLfromString(QString& str);
-	void formattingTr(QString& str);
+	inline void setNameFiles();
+	inline bool parsingIdx();
+	inline bool parsingIfo();
+	inline bool createHash();
+	inline bool loadHash();
+	inline bool loadData();
+	inline void HTMLfromString(QString& str);
+	inline void formattingTr(QString& str);
 	QString getTr(const QString& word);
+	QString getName();
 	
 protected:
 	friend void getTagForDict(Dictionary* p);
@@ -28,6 +29,7 @@ protected:
 private:
 	QHash <QString, QPair <quint32, quint32> > mHash;
 	QString dirDict; // папка словаря
+	QString mName; // имя словаря 
 	QString fileIfo; // имя файла словаря .ifo
 	QString fileIdx; // имя файла словаря .idx
 	QString fileDict; // имя файла словаря .dict

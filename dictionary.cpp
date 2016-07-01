@@ -6,8 +6,8 @@
 #include <sstream>
 #include <fstream>
 
-Dictionary::Dictionary(const QString& dirName)
-	: dirDict(dirName), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
+Dictionary::Dictionary(const QString& dirName, const QString name)
+	: dirDict(dirName), mName(name), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
 {
 	setNameFiles();
@@ -18,6 +18,11 @@ Dictionary::Dictionary(const QString& dirName)
 		//return;
 	}
 	//getTagForDict(this);
+}
+
+QString Dictionary::getName()
+{
+	return mName;
 }
 
 void Dictionary::setNameFiles()
@@ -271,6 +276,10 @@ void Dictionary::formattingTr(QString& str)
 		str.replace(pos + 2, href.size() + 1, " href=\"" + href + "\">" + href);
 		pos += reg.matchedLength();
 	}
+	// добавление сокращённого имени словаря
+	QString ins = "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ff00ff\"><b><i>" + mName + "</i></b></font><br />";
+	str.insert(0, ins);
+	str.push_back("<br />");
 	qDebug() << str;
 	
 	HTMLfromString(str); // в html-текст (с CSS)

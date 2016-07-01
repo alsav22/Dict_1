@@ -36,13 +36,16 @@ public:
 
 	void initialization()
 	{
-		dicts << "stardict-ER-LingvoUniversal-2.4.2" << "stardict-lingvo-ER-Informal-2.4.2"
-			  << "stardict-lingvo-ER-Computer-2.4.2" << "stardict-lingvo-ER-Polytechnical-2.4.2"
-			  << "stardict-lingvo-ER-Biology-2.4.2"  << "stardict-lingvo-ER-Medical-2.4.2";
+		dicts.push_back(qMakePair(QString("stardict-ER-LingvoUniversal-2.4.2"), QString(QWidget::tr("общ."))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Informal-2.4.2"), QString(QWidget::tr("разг."))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Computer-2.4.2"), QString(QWidget::tr("комп."))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Polytechnical-2.4.2"), QString(QWidget::tr("политех."))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Biology-2.4.2"), QString(QWidget::tr("биолог."))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Medical-2.4.2"), QString(QWidget::tr("медиц."))));
 		
 		for (int i = 0; i < dicts.size(); ++i)
 		{
-			Dictionary* pdict = new Dictionary(dicts[i]);
+			Dictionary* pdict = new Dictionary(dicts[i].first, dicts[i].second);
 			mvectorPointsToDicts.push_back(pdict);
 		}
 	}
@@ -57,7 +60,7 @@ public:
 				 QString temp = mvectorPointsToDicts[i] ->getTr(word);
 				 if (!temp.isEmpty())
 				 {
-					temp += "///////////////////////<br />";
+					//temp = "<html><br /><i><font color=\"red\"" +  mvectorPointsToDicts[i] ->getName() + "</font></i><br /></html>" + temp;
 					translation.append(temp);
 				 }
 			}
@@ -121,7 +124,7 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 private:
-	QStringList dicts; // имена словарей (папок)
+	QVector <QPair <QString, QString> > dicts; // имена словарей (папок)
 	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
 
 	Ui::DictionarysClass ui;
