@@ -5,24 +5,11 @@
 #include <string>
 #include <sstream>
 #include <fstream>
-#include "GVariables.h"
-
-#ifdef Q_OS_LINUX
-#include <stdlib.h>
-#include <X11/Xlib.h>
-#include <X11/XKBlib.h>
-#endif
-
-#ifdef Q_OS_WIN32
-#include <Windows.h>
-#include <string>
-#endif
 
 Dictionary::Dictionary(const QString& dirName)
 	: dirDict(dirName), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
 {
-	
 	setNameFiles();
 	
 	if (!loadData())

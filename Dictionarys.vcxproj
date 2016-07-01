@@ -169,7 +169,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_dictProgram.cpp;%(Outputs)</Outputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe;DictProgram.h;%(AdditionalInputs)</AdditionalInputs>
     </CustomBuild>
-    <ClInclude Include="GVariables.h" />
     <ClInclude Include="ui_dictionarys.h" />
   </ItemGroup>
   <ItemGroup>

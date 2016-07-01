@@ -3,7 +3,6 @@
 
 #include <QtGui>
 #include "dictionary.h"
-#include "GVariables.h"
 #include "ui_dictionarys.h"
 
 
@@ -25,6 +24,11 @@ class DictProgram : public QWidget
 public:
 	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags)
 	{
+		dicts << "stardict-ER-LingvoUniversal-2.4.2" << "stardict-lingvo-ER-Informal-2.4.2"
+			  << "stardict-lingvo-ER-Computer-2.4.2" << "stardict-lingvo-ER-Polytechnical-2.4.2"
+			  << "stardict-lingvo-ER-Biology-2.4.2"  << "stardict-lingvo-ER-Medical-2.4.2";
+		
+		
 		ui.setupUi(this);
 		//ui.checkBox_0 ->setChecked(true); // общ.
 		//ui.checkBox_1 ->setChecked(true); // разг.
@@ -33,9 +37,9 @@ public:
 		//ui.checkBox_4 ->setChecked(true); // биол.
 		//ui.checkBox_5 ->setChecked(true); // медиц.
 		
-		for (int i = 0; i < GlobalVariables::getGlobalVariables().dicts.size(); ++i)
+		for (int i = 0; i < dicts.size(); ++i)
 		{
-			Dictionary* pdict = new Dictionary(GlobalVariables::getGlobalVariables().dicts[i]);
+			Dictionary* pdict = new Dictionary(dicts[i]);
 			mvectorPointsToDicts.push_back(pdict);
 		}
 	}
@@ -114,7 +118,8 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 private:
-	QVector <Dictionary*> mvectorPointsToDicts;
+	QStringList dicts; // имена словарей (папок)
+	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
 
 	Ui::DictionarysClass ui;
 };

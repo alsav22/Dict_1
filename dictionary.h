@@ -6,7 +6,7 @@
 
 class Dictionary 
 {
-	friend class DictProgram;
+	//friend class DictProgram;
 
 public:
 	Dictionary(const QString& dirName);
