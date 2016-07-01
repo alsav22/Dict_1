@@ -24,6 +24,7 @@ Dictionary::Dictionary(const QString& dirName)
 {
 	
 	setNameFiles();
+	
 	if (!loadData())
 	{
 		qDebug() << "Error loadData()!";
@@ -32,23 +33,8 @@ Dictionary::Dictionary(const QString& dirName)
 	//getTagForDict(this);
 }
 
-void Dictionary::setNameFiles(/*const QString& dirName*/)
+void Dictionary::setNameFiles()
 {
-	//dirDict = dirName;
-	// выбор папки со словарём
-	/*if (ui.checkBox_0 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[0];
-	if (ui.checkBox_1 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[1];
-	if (ui.checkBox_2 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[2];
-	if (ui.checkBox_3 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[3];
-	if (ui.checkBox_4 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[4];
-	if (ui.checkBox_5 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[5];*/
-
 	QDir dir(dirDict);
 	QStringList list = dir.entryList(QDir::Files | QDir::NoDotAndDotDot); // список файлов из папки со словарём
     
@@ -73,8 +59,6 @@ void Dictionary::setNameFiles(/*const QString& dirName*/)
 
 bool Dictionary::loadData()
 {
-	//setNameFiles();
-	
 	if (!QFile::exists(fileParseIfo))
     if (!parsingIfo())
 	{
@@ -98,7 +82,7 @@ bool Dictionary::loadData()
 		qDebug() << "Error loadHash()!";
 		return false;
 	}
-	mpFileDict = new QFile(fileDict, this);
+	mpFileDict = new QFile(fileDict);
 	if (!mpFileDict ->open(QIODevice::ReadOnly))
 	{
 		qDebug() << "Error opening " << fileDict << " !";
@@ -347,15 +331,8 @@ QString Dictionary::getTr(const QString& word)
 	return translation;
 }
 
-// слот для получения перевода
-//void Dictionary::translate()
-//{
-//	QString word((ui.lineEdit ->text()).trimmed());
-//	QString translation = getTr(word);
-//	outputTr(translation);
-//}
-
 Dictionary::~Dictionary()
 {
-	//delete mpFont;
+	mpFileDict ->close();
+	delete mpFileDict;
 }

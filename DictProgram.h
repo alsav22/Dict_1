@@ -23,29 +23,21 @@ class DictProgram : public QWidget
 	Q_OBJECT
 
 public:
-	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags), dict(GlobalVariables::getGlobalVariables().dicts[0])
+	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags)
 	{
 		ui.setupUi(this);
-		ui.checkBox_0 ->setChecked(true); // общ.
+		//ui.checkBox_0 ->setChecked(true); // общ.
 		//ui.checkBox_1 ->setChecked(true); // разг.
 		//ui.checkBox_2 ->setChecked(true); // комп.
 		//ui.checkBox_3 ->setChecked(true); // политех.
 		//ui.checkBox_4 ->setChecked(true); // биол.
 		//ui.checkBox_5 ->setChecked(true); // медиц.
-		//dict.setNameFiles(GlobalVariables::getGlobalVariables().dicts[0]);
-		// выбор папки со словарём
-		if (ui.checkBox_0 ->isChecked())
-			dict.dirDict = GlobalVariables::getGlobalVariables().dicts[0];
-		if (ui.checkBox_1 ->isChecked())
-			dict.dirDict = GlobalVariables::getGlobalVariables().dicts[1];
-		if (ui.checkBox_2 ->isChecked())
-			dict.dirDict = GlobalVariables::getGlobalVariables().dicts[2];
-		if (ui.checkBox_3 ->isChecked())
-			dict.dirDict = GlobalVariables::getGlobalVariables().dicts[3];
-		if (ui.checkBox_4 ->isChecked())
-			dict.dirDict = GlobalVariables::getGlobalVariables().dicts[4];
-		if (ui.checkBox_5 ->isChecked())
-			dict.dirDict = GlobalVariables::getGlobalVariables().dicts[5];
+		
+		for (int i = 0; i < GlobalVariables::getGlobalVariables().dicts.size(); ++i)
+		{
+			Dictionary* pdict = new Dictionary(GlobalVariables::getGlobalVariables().dicts[i]);
+			mvectorPointsToDicts.push_back(pdict);
+		}
 	}
 
 	// вывод перевода
@@ -59,13 +51,27 @@ public:
 	}
 	
 	~DictProgram()
-	{}
+	{
+		for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
+		{
+			delete mvectorPointsToDicts[i];
+		}
+	}
 
 	public slots:
 		void translate()
 		{
 			QString word((ui.lineEdit ->text()).trimmed());
-			QString translation = dict.getTr(word);
+			QString translation;
+			for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
+			{
+				 QString temp = mvectorPointsToDicts[i] ->getTr(word);
+				 if (!temp.isEmpty())
+				 {
+					temp += "///////////////////////<br />";
+					translation.append(temp);
+				 }
+			}
 			outputTr(translation);
 		}
 
@@ -108,7 +114,7 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 private:
-	Dictionary dict;
+	QVector <Dictionary*> mvectorPointsToDicts;
 
 	Ui::DictionarysClass ui;
 };

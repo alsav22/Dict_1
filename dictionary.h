@@ -4,17 +4,15 @@
 #include <QtGui>
 #include "ui_dictionarys.h"
 
-class Dictionary : public QWidget
+class Dictionary 
 {
-	Q_OBJECT
-
 	friend class DictProgram;
 
 public:
 	Dictionary(const QString& dirName);
 	~Dictionary();
 	
-	void setNameFiles(/*const QString& dirName*/);
+	void setNameFiles();
 	bool parsingIdx();
 	bool parsingIfo();
 	bool createHash();
@@ -23,16 +21,11 @@ public:
 	void HTMLfromString(QString& str);
 	void formattingTr(QString& str);
 	QString getTr(const QString& word);
-	//void outputTr(QString& translation);
-
+	
 protected:
-	//bool Dictionary::event(QEvent* pe); // переключение на английский ввод при активном окне
-
 	friend void getTagForDict(Dictionary* p);
 
 private:
-	//Ui::DictionarysClass ui;
-	
 	QHash <QString, QPair <quint32, quint32> > mHash;
 	QString dirDict; // папка словаря
 	QString fileIfo; // имя файла словаря .ifo
@@ -49,11 +42,8 @@ private:
 	quint32 idxfilesize; // размер файла .idx
 
 	QFile* mpFileDict; // объект для работы с файлом словаря .dict
-	
-//public slots:
-//		void translate();
 };
-
+	
 #endif // DICTIONARY_H
 
 
