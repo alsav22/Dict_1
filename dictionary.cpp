@@ -280,7 +280,7 @@ void Dictionary::formattingTr(QString& str)
 	QString ins = "&nbsp;&nbsp;&nbsp;&nbsp;<font color=\"#ff00ff\"><b><i>" + mName + "</i></b></font><br />";
 	str.insert(0, ins);
 	str.push_back("<br />");
-	qDebug() << str;
+	//qDebug() << str;
 	
 	HTMLfromString(str); // в html-текст (с CSS)
 }

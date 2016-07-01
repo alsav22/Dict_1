@@ -24,24 +24,27 @@ class DictProgram : public QWidget
 public:
 	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags)
 	{
-		initialization();
 		ui.setupUi(this);
-		//ui.checkBox_0 ->setChecked(true); // общ.
-		//ui.checkBox_1 ->setChecked(true); // разг.
-		//ui.checkBox_2 ->setChecked(true); // комп.
-		//ui.checkBox_3 ->setChecked(true); // политех.
-		//ui.checkBox_4 ->setChecked(true); // биол.
-		//ui.checkBox_5 ->setChecked(true); // медиц.
+		ui.checkBox_0 ->setChecked(true); // общ.
+		
+		initialization();
 	}
 
 	void initialization()
 	{
-		dicts.push_back(qMakePair(QString("stardict-ER-LingvoUniversal-2.4.2"), QString(QWidget::tr("общ."))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Informal-2.4.2"), QString(QWidget::tr("разг."))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Computer-2.4.2"), QString(QWidget::tr("комп."))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Polytechnical-2.4.2"), QString(QWidget::tr("политех."))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Biology-2.4.2"), QString(QWidget::tr("биолог."))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Medical-2.4.2"), QString(QWidget::tr("медиц."))));
+		dicts.push_back(qMakePair(QString("stardict-ER-LingvoUniversal-2.4.2"), QString(QWidget::tr("Общей лексики"))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Informal-2.4.2"), QString(QWidget::tr("Разговорной лексики"))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Computer-2.4.2"), QString(QWidget::tr("Компьютерный"))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Polytechnical-2.4.2"), QString(QWidget::tr("Политехнический"))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Biology-2.4.2"), QString(QWidget::tr("Биологический"))));
+		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Medical-2.4.2"), QString(QWidget::tr("Медицинский"))));
+		
+		mvectorPointsToCheckBox.push_back(ui.checkBox_0); // общ.
+		mvectorPointsToCheckBox.push_back(ui.checkBox_1); // разг.
+		mvectorPointsToCheckBox.push_back(ui.checkBox_2); // комп.
+		mvectorPointsToCheckBox.push_back(ui.checkBox_3); // политех.
+		mvectorPointsToCheckBox.push_back(ui.checkBox_4); // биол.
+		mvectorPointsToCheckBox.push_back(ui.checkBox_5); // медиц.
 		
 		for (int i = 0; i < dicts.size(); ++i)
 		{
@@ -57,12 +60,14 @@ public:
 			QString translation;
 			for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
 			{
-				 QString temp = mvectorPointsToDicts[i] ->getTr(word);
-				 if (!temp.isEmpty())
-				 {
-					//temp = "<html><br /><i><font color=\"red\"" +  mvectorPointsToDicts[i] ->getName() + "</font></i><br /></html>" + temp;
-					translation.append(temp);
-				 }
+				if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
+				{
+					 QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
+					 if (!temp.isEmpty())
+					 {
+						translation.append(temp); // суммирование переводов от разных словарей
+					 }
+				}
 			}
 			outputTr(translation);
 		}
@@ -124,9 +129,9 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 private:
-	QVector <QPair <QString, QString> > dicts; // имена словарей (папок)
+	QVector <QPair <QString, QString> > dicts; // контейнер с именами словарей (папок)
 	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
-
+	QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
 	Ui::DictionarysClass ui;
 };
 

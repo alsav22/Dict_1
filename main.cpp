@@ -61,11 +61,13 @@ int main(int argc, char *argv[])
 	QApplication app(argc, argv);
 
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
-
+	
 	DictProgram w;
 	
 	QObject::connect(&w, SIGNAL(destroyed()), &app, SLOT(quit()));
 	
 	w.show();
 	return app.exec();
+	
+	//system("pause");
 }
