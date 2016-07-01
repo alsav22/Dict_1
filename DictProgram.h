@@ -24,11 +24,7 @@ class DictProgram : public QWidget
 public:
 	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags)
 	{
-		dicts << "stardict-ER-LingvoUniversal-2.4.2" << "stardict-lingvo-ER-Informal-2.4.2"
-			  << "stardict-lingvo-ER-Computer-2.4.2" << "stardict-lingvo-ER-Polytechnical-2.4.2"
-			  << "stardict-lingvo-ER-Biology-2.4.2"  << "stardict-lingvo-ER-Medical-2.4.2";
-		
-		
+		initialization();
 		ui.setupUi(this);
 		//ui.checkBox_0 ->setChecked(true); // общ.
 		//ui.checkBox_1 ->setChecked(true); // разг.
@@ -36,29 +32,18 @@ public:
 		//ui.checkBox_3 ->setChecked(true); // политех.
 		//ui.checkBox_4 ->setChecked(true); // биол.
 		//ui.checkBox_5 ->setChecked(true); // медиц.
+	}
+
+	void initialization()
+	{
+		dicts << "stardict-ER-LingvoUniversal-2.4.2" << "stardict-lingvo-ER-Informal-2.4.2"
+			  << "stardict-lingvo-ER-Computer-2.4.2" << "stardict-lingvo-ER-Polytechnical-2.4.2"
+			  << "stardict-lingvo-ER-Biology-2.4.2"  << "stardict-lingvo-ER-Medical-2.4.2";
 		
 		for (int i = 0; i < dicts.size(); ++i)
 		{
 			Dictionary* pdict = new Dictionary(dicts[i]);
 			mvectorPointsToDicts.push_back(pdict);
-		}
-	}
-
-	// вывод перевода
-	void outputTr(QString& translation)
-	{
-		ui.textEdit ->clear();
-		if (!translation.isEmpty())
-			ui.textEdit ->setText(translation);
-		else
-			ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
-	}
-	
-	~DictProgram()
-	{
-		for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
-		{
-			delete mvectorPointsToDicts[i];
 		}
 	}
 
@@ -78,6 +63,24 @@ public:
 			}
 			outputTr(translation);
 		}
+public:	
+	// вывод перевода
+	void outputTr(QString& translation)
+	{
+		ui.textEdit ->clear();
+		if (!translation.isEmpty())
+			ui.textEdit ->setText(translation);
+		else
+			ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
+	}
+	
+	~DictProgram()
+	{
+		for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
+		{
+			delete mvectorPointsToDicts[i];
+		}
+	}
 
 protected:
 	// Переключение на английский ввод при активном окне
