@@ -18,18 +18,12 @@
 #include <string>
 #endif
 
-Dictionary::Dictionary(QWidget *parent, Qt::WFlags flags)
-	: QWidget(parent, flags), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
+Dictionary::Dictionary(const QString& dirName)
+	: dirDict(dirName), ifoWordcount("wordcount"), ifoIdxfilesize("idxfilesize"),
 	  wordcount(0), idxfilesize(0), offset(0), size(0), mpFileDict(nullptr)
 {
-	//ui.setupUi(this);
-	//ui.checkBox_0 ->setChecked(true); // общ.
-	//ui.checkBox_1 ->setChecked(true); // разг.
-	//ui.checkBox_2 ->setChecked(true); // комп.
-	//ui.checkBox_3 ->setChecked(true); // политех.
-	//ui.checkBox_4 ->setChecked(true); // биол.
-	//ui.checkBox_5 ->setChecked(true); // медиц.
 	
+	setNameFiles();
 	if (!loadData())
 	{
 		qDebug() << "Error loadData()!";
@@ -38,10 +32,11 @@ Dictionary::Dictionary(QWidget *parent, Qt::WFlags flags)
 	//getTagForDict(this);
 }
 
-void Dictionary::setNameFiles()
+void Dictionary::setNameFiles(/*const QString& dirName*/)
 {
+	//dirDict = dirName;
 	// выбор папки со словарём
-	if (ui.checkBox_0 ->isChecked())
+	/*if (ui.checkBox_0 ->isChecked())
 		dirDict = GlobalVariables::getGlobalVariables().dicts[0];
 	if (ui.checkBox_1 ->isChecked())
 		dirDict = GlobalVariables::getGlobalVariables().dicts[1];
@@ -52,7 +47,7 @@ void Dictionary::setNameFiles()
 	if (ui.checkBox_4 ->isChecked())
 		dirDict = GlobalVariables::getGlobalVariables().dicts[4];
 	if (ui.checkBox_5 ->isChecked())
-		dirDict = GlobalVariables::getGlobalVariables().dicts[5];
+		dirDict = GlobalVariables::getGlobalVariables().dicts[5];*/
 
 	QDir dir(dirDict);
 	QStringList list = dir.entryList(QDir::Files | QDir::NoDotAndDotDot); // список файлов из папки со словарём
@@ -78,7 +73,7 @@ void Dictionary::setNameFiles()
 
 bool Dictionary::loadData()
 {
-	setNameFiles();
+	//setNameFiles();
 	
 	if (!QFile::exists(fileParseIfo))
     if (!parsingIfo())
@@ -146,14 +141,14 @@ void getTagForDict(Dictionary* p)
 				if (!strList.contains(tag))
 				{
 					strList << tag;
-					//qDebug() << tag;
+					qDebug() << tag;
 				}
 				pos += reg.matchedLength();
 			}
 		}
 	}
-	foreach(QString s, strList)
-		p ->ui.textEdit ->append(s);//setText(s);
+	//foreach(QString s, strList)
+	//	p ->ui.textEdit ->append(s);//setText(s);
 	
 }
 
@@ -353,60 +348,12 @@ QString Dictionary::getTr(const QString& word)
 }
 
 // слот для получения перевода
-void Dictionary::translate()
-{
-	QString word((ui.lineEdit ->text()).trimmed());
-	QString translation = getTr(word);
-	outputTr(translation);
-}
-
-// вывод перевода
-void Dictionary::outputTr(QString& translation)
-{
-	ui.textEdit ->clear();
-	if (!translation.isEmpty())
-		ui.textEdit ->setText(translation);
-	else
-		ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
-}
-
-// Переключение на английский ввод при активном окне
-bool Dictionary::event(QEvent* pe) 
-{
-	if (pe ->type() == QEvent::WindowActivate)
-	{
-#ifdef Q_OS_WIN32
-		
-			qDebug() << "define Q_OS_WIN32";
-			PostMessage(GetForegroundWindow(), WM_INPUTLANGCHANGEREQUEST, 1, 0x04090409);
-			// LoadKeyboardLayout(L"00000409", KLF_ACTIVATE); // или так
-#endif
-
-#ifdef Q_OS_LINUX
-#ifdef DEBUG
-qDebug() << "define Q_OS_LINUX";
-#endif
-			
-			int xkbGroup = 0;
-            int event_rtrn, error_rtrn, reason_rtrn;
-            Display* display = XkbOpenDisplay(NULL, &event_rtrn, &error_rtrn,
-                                              NULL, NULL, &reason_rtrn       );
-            if(display == NULL)
-            {
-                #ifdef DEBUG
-				qDebug() << "Cannot open display!";
-                #endif
-                return QWidget::event(pe);
-            }
-            XkbLockGroup(display, XkbUseCoreKbd, xkbGroup);
-            XCloseDisplay(display);
-#endif
-	
-	}
-	return QWidget::event(pe);
-	
-}
-
+//void Dictionary::translate()
+//{
+//	QString word((ui.lineEdit ->text()).trimmed());
+//	QString translation = getTr(word);
+//	outputTr(translation);
+//}
 
 Dictionary::~Dictionary()
 {

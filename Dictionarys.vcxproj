@@ -134,6 +134,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="debug\moc_dictProgram.cpp" />
     <ClCompile Include="dictionary.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -162,6 +163,12 @@
     <ClCompile Include="release\qrc_dictionarys.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <CustomBuild Include="DictProgram.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe  -DUNICODE -DWIN32 -DQT_DLL -DQT_GUI_LIB -DQT_CORE_LIB -DQT_HAVE_MMX -DQT_HAVE_3DNOW -DQT_HAVE_SSE -DQT_HAVE_MMXEXT -DQT_HAVE_SSE2 -DQT_THREAD_SUPPORT -I"..\..\..\Programs\Qt\4.8.5\include\QtCore" -I"..\..\..\Programs\Qt\4.8.5\include\QtGui" -I"..\..\..\Programs\Qt\4.8.5\include" -I"." -I"..\..\..\Programs\Qt\4.8.5\include\ActiveQt" -I"debug" -I"." -I..\..\..\Programs\Qt\4.8.5\mkspecs\win32-msvc2010 -D_MSC_VER=1600 -DWIN32 DictProgram.h -o debug\moc_dictProgram.cpp</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">MOC DictProgram.h</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">debug\moc_dictProgram.cpp;%(Outputs)</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Programs\Qt\4.8.5\bin\moc.exe;DictProgram.h;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
     <ClInclude Include="GVariables.h" />
     <ClInclude Include="ui_dictionarys.h" />
   </ItemGroup>

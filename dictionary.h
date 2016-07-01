@@ -8,11 +8,13 @@ class Dictionary : public QWidget
 {
 	Q_OBJECT
 
+	friend class DictProgram;
+
 public:
-	Dictionary(QWidget *parent = 0, Qt::WFlags flags = 0);
+	Dictionary(const QString& dirName);
 	~Dictionary();
 	
-	void setNameFiles();
+	void setNameFiles(/*const QString& dirName*/);
 	bool parsingIdx();
 	bool parsingIfo();
 	bool createHash();
@@ -21,15 +23,15 @@ public:
 	void HTMLfromString(QString& str);
 	void formattingTr(QString& str);
 	QString getTr(const QString& word);
-	void outputTr(QString& translation);
+	//void outputTr(QString& translation);
 
 protected:
-	bool Dictionary::event(QEvent* pe); // переключение на английский ввод при активном окне
+	//bool Dictionary::event(QEvent* pe); // переключение на английский ввод при активном окне
 
 	friend void getTagForDict(Dictionary* p);
 
 private:
-	Ui::DictionarysClass ui;
+	//Ui::DictionarysClass ui;
 	
 	QHash <QString, QPair <quint32, quint32> > mHash;
 	QString dirDict; // папка словаря
@@ -48,8 +50,8 @@ private:
 
 	QFile* mpFileDict; // объект для работы с файлом словаря .dict
 	
-public slots:
-		void translate();
+//public slots:
+//		void translate();
 };
 
 #endif // DICTIONARY_H

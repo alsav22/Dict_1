@@ -43,6 +43,7 @@
 
 #include <QtGui>
 #include "dictionary.h"
+#include "DictProgram.h"
 #include <QtGui/QApplication>
 
 #ifdef QT_DEBUG
@@ -61,7 +62,8 @@ int main(int argc, char *argv[])
 
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("CP1251"));
 
-	Dictionary w;
+	//Dictionary w;
+	DictProgram w;
 	
 	QObject::connect(&w, SIGNAL(destroyed()), &app, SLOT(quit()));
 	
