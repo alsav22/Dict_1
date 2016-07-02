@@ -291,7 +291,7 @@ void Dictionary::HTMLfromString(QString& str)
 	QString begin("<html><head>");
 	QString style("<style type=text/css>"
 		          "k {font-weight: bold}"
-				  "kref {font-weight: bold; font-style: oblique}"
+				  "kref {color: #008080; font-size: 5; font-weight: bold}"
 				  "t {font-size: 5; font-family: \"Lucida Sans Unicode\"}"
 				  "c {color: blue}");
 	QString end("</style></head><body>" + str + "</body></html>");
@@ -329,6 +329,7 @@ QString Dictionary::getTr(const QString& word)
 
 Dictionary::~Dictionary()
 {
-	mpFileDict ->close();
+	if (mpFileDict)
+		mpFileDict ->close();
 	delete mpFileDict;
 }

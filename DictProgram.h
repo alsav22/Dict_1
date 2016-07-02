@@ -32,12 +32,12 @@ public:
 
 	void initialization()
 	{
-		dicts.push_back(qMakePair(QString("stardict-ER-LingvoUniversal-2.4.2"), QString(QWidget::tr("Общей лексики"))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Informal-2.4.2"), QString(QWidget::tr("Разговорной лексики"))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Computer-2.4.2"), QString(QWidget::tr("Компьютерный"))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Polytechnical-2.4.2"), QString(QWidget::tr("Политехнический"))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Biology-2.4.2"), QString(QWidget::tr("Биологический"))));
-		dicts.push_back(qMakePair(QString("stardict-lingvo-ER-Medical-2.4.2"), QString(QWidget::tr("Медицинский"))));
+		mvectorNamesDicts.push_back(qMakePair(QString("stardict-ER-LingvoUniversal-2.4.2"), QString(QWidget::tr("Общей лексики"))));
+		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Informal-2.4.2"), QString(QWidget::tr("Разговорной лексики"))));
+		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Computer-2.4.2"), QString(QWidget::tr("Компьютерный"))));
+		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Polytechnical-2.4.2"), QString(QWidget::tr("Политехнический"))));
+		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Biology-2.4.2"), QString(QWidget::tr("Биологический"))));
+		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Medical-2.4.2"), QString(QWidget::tr("Медицинский"))));
 		
 		mvectorPointsToCheckBox.push_back(ui.checkBox_0); // общ.
 		mvectorPointsToCheckBox.push_back(ui.checkBox_1); // разг.
@@ -46,9 +46,9 @@ public:
 		mvectorPointsToCheckBox.push_back(ui.checkBox_4); // биол.
 		mvectorPointsToCheckBox.push_back(ui.checkBox_5); // медиц.
 		
-		for (int i = 0; i < dicts.size(); ++i)
+		for (int i = 0; i < mvectorNamesDicts.size(); ++i)
 		{
-			Dictionary* pdict = new Dictionary(dicts[i].first, dicts[i].second);
+			Dictionary* pdict = new Dictionary(mvectorNamesDicts[i].first, mvectorNamesDicts[i].second);
 			mvectorPointsToDicts.push_back(pdict);
 		}
 	}
@@ -129,7 +129,7 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 private:
-	QVector <QPair <QString, QString> > dicts; // контейнер с именами словарей (папок)
+	QVector <QPair <QString, QString> > mvectorNamesDicts; // контейнер с именами словарей (папок)
 	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
 	QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
 	Ui::DictionarysClass ui;
