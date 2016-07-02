@@ -25,7 +25,7 @@ public:
 	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags)
 	{
 		ui.setupUi(this);
-		ui.checkBox_0 ->setChecked(true); // общ.
+		ui.checkBox_0 ->setChecked(true); // общ. (по умолчанию)
 		
 		initialization();
 	}
@@ -96,25 +96,30 @@ public:
 	
 		HTMLfromString(str); // в html-текст (с CSS)
 	}
+	// получение первода (из нескольких словарей) слова word в строку translation
+	void translate(const QString& word, QString& translation)
+	{
+		for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
+		{
+			if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
+			{
+				QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
+				if (!temp.isEmpty())
+				{
+					formattingTr(temp, mvectorPointsToDicts[i] ->getName());
+					translation.append(temp); // суммирование переводов от разных словарей
+				}
+			}
+		}
+	}
 
 	public slots:
 		void translate()
 		{
-			QString word((ui.lineEdit ->text()).trimmed());
-			QString translation;
-			for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
-			{
-				if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
-				{
-					 QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
-					 if (!temp.isEmpty())
-					 {
-						 formattingTr(temp, mvectorPointsToDicts[i] ->getName());
-						 translation.append(temp); // суммирование переводов от разных словарей
-					 }
-				}
-			}
-			outputTr(translation);
+			QString word = ui.lineEdit ->text().trimmed();
+			QString tr;
+			translate(word, tr); 
+			outputTr(tr);
 		}
 public:	
 	// вывод перевода
