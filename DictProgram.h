@@ -22,31 +22,56 @@ class DictProgram : public QWidget
 	Q_OBJECT
 
 public:
-	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags)
+	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags), mNumberDicts(0)
 	{
 		ui.setupUi(this);
 		ui.checkBox_0 ->setChecked(true); // общ. (по умолчанию)
 		
-		initialization();
+		if (!initialization())
+		{
+			qDebug() << "Error initialization()!";
+		}
 	}
 
-	void initialization()
+	bool initialization()
 	{
-		mvectorNamesDicts.push_back(qMakePair(QString("stardict-ER-LingvoUniversal-2.4.2"), QString(QWidget::tr("Общей лексики"))));
-		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Informal-2.4.2"), QString(QWidget::tr("Разговорной лексики"))));
-		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Computer-2.4.2"), QString(QWidget::tr("Компьютерный"))));
-		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Polytechnical-2.4.2"), QString(QWidget::tr("Политехнический"))));
-		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Biology-2.4.2"), QString(QWidget::tr("Биологический"))));
-		mvectorNamesDicts.push_back(qMakePair(QString("stardict-lingvo-ER-Medical-2.4.2"), QString(QWidget::tr("Медицинский"))));
+		QFile fileIn("DirsDicts.txt");
+		if (!fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
+		{
+			qDebug() << "Error opening file DirsDicts.txt!";
+			return false;
+		}
+		QTextStream rd(&fileIn);
+		QString DirDict;
+		QString NameForOut;
+		while (true)
+		{
+			DirDict = rd.readLine();
+			if (rd.atEnd())
+				break;
+			NameForOut = rd.readLine();
+			
+			mvectorNamesDicts.push_back(qMakePair(DirDict, NameForOut));
+		}
 		
-		mvectorPointsToCheckBox.push_back(ui.checkBox_0); // общ.
-		mvectorPointsToCheckBox.push_back(ui.checkBox_1); // разг.
-		mvectorPointsToCheckBox.push_back(ui.checkBox_2); // комп.
-		mvectorPointsToCheckBox.push_back(ui.checkBox_3); // политех.
-		mvectorPointsToCheckBox.push_back(ui.checkBox_4); // биол.
-		mvectorPointsToCheckBox.push_back(ui.checkBox_5); // медиц.
+		mNumberDicts = mvectorNamesDicts.size();
+		if (mNumberDicts == 0)
+		{
+			qDebug() << "The dictionaries are not found!";
+			return false;
+		}
+////////////////////////// Блок используется с чек-боксами GUI, объединёнными в groupBox		
+		if (mNumberDicts != ui.groupBox ->children().size())
+		{
+			qDebug() << "The number of dictionaries does not match the number of check-boxes!";
+			return false;
+		}
 		
-		for (int i = 0; i < mvectorNamesDicts.size(); ++i)
+		foreach(QObject* p, ui.groupBox ->children())
+			mvectorPointsToCheckBox.push_back(static_cast <QCheckBox*>(p));
+///////////////////////////
+		
+		for (int i = 0; i < mNumberDicts; ++i)
 		{
 			Dictionary* pdict = new Dictionary(mvectorNamesDicts[i].first, mvectorNamesDicts[i].second);
 			mvectorPointsToDicts.push_back(pdict);
@@ -100,7 +125,7 @@ public:
 	void translate(const QString& word, QString& translation)
 	{
 		translation.clear();
-		for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
+		for (int i = 0; i < mNumberDicts; ++i)
 		{
 			if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
 			{
@@ -113,6 +138,10 @@ public:
 			}
 		}
 	}
+	quint8 getNumberDicts()
+	{ return mNumberDicts; }
+	void setNumberDicts(quint8 number)
+	{ mNumberDicts = number; }
 
 	public slots:
 		void translate()
@@ -135,7 +164,7 @@ public:
 	
 	~DictProgram()
 	{
-		for (int i = 0; i < mvectorPointsToDicts.size(); ++i)
+		for (int i = 0; i < mNumberDicts; ++i)
 		{
 			delete mvectorPointsToDicts[i];
 		}
@@ -183,6 +212,7 @@ private:
 	QVector <QPair <QString, QString> > mvectorNamesDicts; // контейнер с именами словарей (папок)
 	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
 	QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
+	quint8 mNumberDicts;
 	Ui::DictionarysClass ui;
 };
 
