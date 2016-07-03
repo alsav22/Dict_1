@@ -76,18 +76,24 @@ public:
 			Dictionary* pdict = new Dictionary(mvectorNamesDicts[i].first, mvectorNamesDicts[i].second);
 			mvectorPointsToDicts.push_back(pdict);
 		}
+		return true;
 	}
-	// из QString в HTML-текст (задание стилей CSS)
+	
+	// задание стилей CSS)
 	void HTMLfromString(QString& str)
 	{
-		QString begin("<html><head>");
+		//QString begin("<html><head>");
 		QString style("<style type=text/css>"
 					  "k {font-weight: bold}"
 					  "kref {color: #008080; font-size: 5; font-weight: bold}"
 					  "t {font-size: 5; font-family: \"Lucida Sans Unicode\"}"
-					  "c {color: blue}");
-		QString end("</style></head><body>" + str + "</body></html>");
-		str = begin + style + end;
+					  "c {color: blue}"
+					  "</style>");
+		//QString end("</style></head><body>" + str + "</body></html>");
+		//QString end("</style></head>" + str);
+		//str = begin + style + end;
+		str = style + str;
+		
 	}
 	// форматирование перевода
 	void formattingTr(QString& str, QString name)
@@ -160,6 +166,7 @@ public:
 			ui.textEdit ->setText(translation);
 		else
 			ui.textEdit ->setText(QWidget::tr("Слово не найдено!"));
+		qDebug() << ui.textEdit ->toHtml();
 	}
 	
 	~DictProgram()
