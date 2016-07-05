@@ -129,6 +129,22 @@
      <bool>false</bool>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBox_1">
+     <property name="geometry">
+       <rect>
+         <x>15</x>
+         <y>75</y>
+         <width>191</width>
+         <height>23</height>
+       </rect>
+     </property>
+     <property name="text">
+       <string>Разговорной лексики</string>
+     </property>
+     <property name="checked">
+       <bool>false</bool>
+     </property>
+   </widget>
    <widget class="QCheckBox" name="checkBox_2">
     <property name="geometry">
      <rect>
@@ -172,22 +188,6 @@
     </property>
     <property name="text">
      <string>Биологический</string>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_1">
-    <property name="geometry">
-     <rect>
-      <x>15</x>
-      <y>75</y>
-      <width>191</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Разговорной лексики</string>
     </property>
     <property name="checked">
      <bool>false</bool>
