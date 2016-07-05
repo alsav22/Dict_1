@@ -89,9 +89,14 @@ void getTagForDict(Dictionary* p)
 	//QRegExp reg("(</?[a-z]+\\s?/?>)");
 	QRegExp reg("(<k>.+</k>\\n ?<(?!tr))");
 	QString tag;
-	int pos;
+	static int pos = 0;
 
 	QFile fileIn(p ->fileParseIdx);
+	QString fileName = "file_" + QString::number(pos) + ".txt";
+	QFile fileOut(fileName);
+	if (!fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
+		qDebug() << "Error in getTagForDict(Dictionary* p)!";
+	QTextStream out(&fileOut);
 	
 	if (fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
@@ -101,29 +106,37 @@ void getTagForDict(Dictionary* p)
 		while (true)
 		{
 			temp = in.readLine();
+			if (in.atEnd())
+				break;
 			in >> i >> i;
 			in.read(1);
-			str = p ->mpFileDict ->read(i);
-			//str = p ->mpFileDict ->readLine();
-			if (p ->mpFileDict ->atEnd())
-				break;
-			pos = 0;
-			while ((pos = reg.indexIn(str, pos)) != -1)
+			if (!temp[0].isLetter())
 			{
-				
-				tag = reg.cap(0);
-				//p ->ui.textEdit ->setText(tag);
-				if (!strList.contains(tag))
-				{
-					strList << tag;
-					qDebug() << tag;
-				}
-				pos += reg.matchedLength();
+				out << temp << endl;
+				++pos;
 			}
+			//str = p ->mpFileDict ->read(i);
+			////str = p ->mpFileDict ->readLine();
+			//if (p ->mpFileDict ->atEnd())
+			//	break;
+			//pos = 0;
+			//while ((pos = reg.indexIn(str, pos)) != -1)
+			//{
+			//	
+			//	tag = reg.cap(0);
+			//	//p ->ui.textEdit ->setText(tag);
+			//	if (!strList.contains(tag))
+			//	{
+			//		strList << tag;
+			//		qDebug() << tag;
+			//	}
+			//	pos += reg.matchedLength();
+			//}
 		}
 	}
 	//foreach(QString s, strList)
 	//	p ->ui.textEdit ->append(s);//setText(s);
+	qDebug() << "pos = " << pos;
 	
 }
 
