@@ -69,7 +69,7 @@ public:
 		
 		foreach(QObject* p, ui.groupBox ->children())
 		{
-			qDebug() << p ->objectName();
+			//qDebug() << p ->objectName();
 			mvectorPointsToCheckBox.push_back(static_cast <QCheckBox*>(p));
 		}
 ///////////////////////////
