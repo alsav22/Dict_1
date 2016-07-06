@@ -67,11 +67,13 @@ public:
 			return false;
 		}
 		
-		foreach(QObject* p, ui.groupBox ->children())
-		{
-			//qDebug() << p ->objectName();
-			mvectorPointsToCheckBox.push_back(static_cast <QCheckBox*>(p));
-		}
+		//foreach(QObject* p, ui.groupBox ->children())
+		//{
+		//	//qDebug() << p ->objectName();
+		//	//qDebug() << ((QCheckBox*)p) ->text();
+		//	// указатели на чек-боксы помещаются в контейнер
+		//	mvectorPointsToCheckBox.push_back(static_cast <QCheckBox*>(p));
+		//}
 ///////////////////////////
 		
 		for (int i = 0; i < mNumberDicts; ++i)
@@ -80,6 +82,19 @@ public:
 			mvectorPointsToDicts.push_back(pdict);
 		}
 		return true;
+	}
+	
+	// передаётся имя словаря для вывода (совпадает с текстом соответствующего чек-бокса)
+	// возвращает указатель на соответствующий чек-бокс
+	QCheckBox* getPointerToCheckBox(const QString text) 
+	{
+		QObjectList list = ui.groupBox ->children();
+		foreach(QObject* p, list)
+		{
+			if (static_cast<QCheckBox*>(p) ->text() == text)
+				return static_cast<QCheckBox*>(p);
+		}
+		return nullptr;
 	}
 	
 	// задание стилей CSS)
@@ -137,15 +152,26 @@ public:
 		translation.clear();
 		for (int i = 0; i < mNumberDicts; ++i)
 		{
-			if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
+			QCheckBox* pCheckBox = getPointerToCheckBox(mvectorPointsToDicts[i] ->getName());
+			if (pCheckBox)
 			{
-				QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
-				if (!temp.isEmpty())
+				if (pCheckBox ->checkState() == Qt::Checked)
+				//if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
 				{
-					formattingTr(temp, mvectorPointsToDicts[i] ->getName());
-					translation.append(temp); // суммирование переводов от разных словарей
+					QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
+					if (!temp.isEmpty())
+					{
+						formattingTr(temp, mvectorPointsToDicts[i] ->getName());
+						translation.append(temp); // суммирование переводов от разных словарей
+					}
 				}
 			}
+			else
+			{
+				qDebug() << "The dictionaries are not found to the check boxs!";
+				return;
+			}
+
 		}
 	}
 	quint8 getNumberDicts()
@@ -222,7 +248,7 @@ qDebug() << "define Q_OS_LINUX";
 private:
 	QVector <QPair <QString, QString> > mvectorNamesDicts; // контейнер с именами словарей (папок)
 	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
-	QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
+	//QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
 	quint8 mNumberDicts;
 	Ui::DictionarysClass ui;
 };
