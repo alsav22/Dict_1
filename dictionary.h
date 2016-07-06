@@ -17,9 +17,9 @@ protected:
 	friend void getTagForDict(Dictionary* p);
 
 private:
-	QHash <QString, QPair <quint32, quint32> > mHash;
+	QHash <QString, QPair <quint32, quint32> > mHash; // хеш для данных из .idx
 	QString dirDict;  // папка словаря
-	QString mName;    // имя словаря 
+	QString mName;    // имя словаря, которое используется при выводе перевода из этого словаря 
 	QString fileIfo;  // имя файла словаря .ifo
 	QString fileIdx;  // имя файла словаря .idx
 	QString fileDict; // имя файла словаря .dict

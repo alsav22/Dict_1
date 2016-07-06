@@ -114,12 +114,12 @@ public:
         label->setText(QApplication::translate("DictionarysClass", "\320\222\320\262\320\265\320\264\320\270\321\202\320\265 \320\260\320\275\320\263\320\273\320\270\320\271\321\201\320\272\320\276\320\265 \321\201\320\273\320\276\320\262\320\276:", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("DictionarysClass", "\320\237\320\265\321\200\320\265\320\262\320\276\320\264:", 0, QApplication::UnicodeUTF8));
         groupBox->setTitle(QApplication::translate("DictionarysClass", "\320\241\320\273\320\276\320\262\320\260\321\200\320\270", 0, QApplication::UnicodeUTF8));
-        checkBox_0->setText(QApplication::translate("DictionarysClass", "\320\236\320\261\321\211\320\265\320\271 \320\273\320\265\320\272\321\201\320\270\320\272\320\270", 0, QApplication::UnicodeUTF8));
-        checkBox_1->setText(QApplication::translate("DictionarysClass", "\320\240\320\260\320\267\320\263\320\276\320\262\320\276\321\200\320\275\320\276\320\271 \320\273\320\265\320\272\321\201\320\270\320\272\320\270", 0, QApplication::UnicodeUTF8));
-        checkBox_2->setText(QApplication::translate("DictionarysClass", "\320\232\320\276\320\274\320\277\321\214\321\216\321\202\320\265\321\200\320\275\321\213\320\271", 0, QApplication::UnicodeUTF8));
-        checkBox_3->setText(QApplication::translate("DictionarysClass", "\320\237\320\276\320\273\320\270\321\202\320\265\321\205\320\275\320\270\321\207\320\265\321\201\320\272\320\270\320\271", 0, QApplication::UnicodeUTF8));
-        checkBox_4->setText(QApplication::translate("DictionarysClass", "\320\221\320\270\320\276\320\273\320\276\320\263\320\270\321\207\320\265\321\201\320\272\320\270\320\271", 0, QApplication::UnicodeUTF8));
-        checkBox_5->setText(QApplication::translate("DictionarysClass", "\320\234\320\265\320\264\320\270\321\206\320\270\320\275\321\201\320\272\320\270\320\271", 0, QApplication::UnicodeUTF8));
+        checkBox_0->setText(QApplication::translate("DictionarysClass", "1", 0, QApplication::UnicodeUTF8));
+        checkBox_1->setText(QApplication::translate("DictionarysClass", "2", 0, QApplication::UnicodeUTF8));
+        checkBox_2->setText(QApplication::translate("DictionarysClass", "3", 0, QApplication::UnicodeUTF8));
+        checkBox_3->setText(QApplication::translate("DictionarysClass", "4", 0, QApplication::UnicodeUTF8));
+        checkBox_4->setText(QApplication::translate("DictionarysClass", "5", 0, QApplication::UnicodeUTF8));
+        checkBox_5->setText(QApplication::translate("DictionarysClass", "6", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

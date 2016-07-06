@@ -25,7 +25,6 @@ public:
 	DictProgram(QWidget *parent = 0, Qt::WFlags flags = 0) : QWidget(parent, flags), mNumberDicts(0)
 	{
 		ui.setupUi(this);
-		ui.checkBox_0 ->setChecked(true); // общ. (по умолчанию)
 		
 		if (!initialization())
 		{
@@ -35,15 +34,15 @@ public:
 
 	bool initialization()
 	{
-		QFile fileIn("DirsDicts.txt");
+		QFile fileIn("DirsDicts.txt"); // файл с именами папок словарей (одна строка) и имён словарей (следующая строка), которые используются при выводе перевода
 		if (!fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
 		{
 			qDebug() << "Error opening file DirsDicts.txt!";
 			return false;
 		}
 		QTextStream rd(&fileIn);
-		QString DirDict;
-		QString NameForOut;
+		QString DirDict; // имя папки словаря
+		QString NameForOut; // имя словаря при выводе
 		while (true)
 		{
 			DirDict = rd.readLine();
@@ -67,34 +66,23 @@ public:
 			return false;
 		}
 		
-		//foreach(QObject* p, ui.groupBox ->children())
-		//{
-		//	//qDebug() << p ->objectName();
-		//	//qDebug() << ((QCheckBox*)p) ->text();
-		//	// указатели на чек-боксы помещаются в контейнер
-		//	mvectorPointsToCheckBox.push_back(static_cast <QCheckBox*>(p));
-		//}
-///////////////////////////
-		
+		QObjectList list = ui.groupBox ->children(); // список указателей на чек-боксы
 		for (int i = 0; i < mNumberDicts; ++i)
 		{
+			// создание словарей
 			Dictionary* pdict = new Dictionary(mvectorNamesDicts[i].first, mvectorNamesDicts[i].second);
 			mvectorPointsToDicts.push_back(pdict);
+			// для чек-бокса устанавливается имя словаря при выводе
+			QCheckBox* p = static_cast<QCheckBox*>(list[i]);
+			p ->setText(mvectorNamesDicts[i].second);
+			if (i == 0)
+				p ->setChecked(true); // первый словарь активен (по умолчанию)
+			// указатели на чек-боксы помещаются в контейнер
+		    mvectorPointsToCheckBox.push_back(p);
 		}
+///////////////////////////
+		
 		return true;
-	}
-	
-	// передаётся имя словаря для вывода (совпадает с текстом соответствующего чек-бокса)
-	// возвращает указатель на соответствующий чек-бокс
-	QCheckBox* getPointerToCheckBox(const QString text) 
-	{
-		QObjectList list = ui.groupBox ->children();
-		foreach(QObject* p, list)
-		{
-			if (static_cast<QCheckBox*>(p) ->text() == text)
-				return static_cast<QCheckBox*>(p);
-		}
-		return nullptr;
 	}
 	
 	// задание стилей CSS)
@@ -152,26 +140,15 @@ public:
 		translation.clear();
 		for (int i = 0; i < mNumberDicts; ++i)
 		{
-			QCheckBox* pCheckBox = getPointerToCheckBox(mvectorPointsToDicts[i] ->getName());
-			if (pCheckBox)
+			if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
 			{
-				if (pCheckBox ->checkState() == Qt::Checked)
-				//if (mvectorPointsToCheckBox[i] ->checkState() == Qt::Checked) // если словарь выбран
+				QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
+				if (!temp.isEmpty())
 				{
-					QString temp = mvectorPointsToDicts[i] ->getTr(word); // получение перевода от этого словаря
-					if (!temp.isEmpty())
-					{
-						formattingTr(temp, mvectorPointsToDicts[i] ->getName());
-						translation.append(temp); // суммирование переводов от разных словарей
-					}
+					formattingTr(temp, mvectorPointsToDicts[i] ->getName());
+					translation.append(temp); // суммирование переводов от разных словарей
 				}
 			}
-			else
-			{
-				qDebug() << "The dictionaries are not found to the check boxs!";
-				return;
-			}
-
 		}
 	}
 	quint8 getNumberDicts()
@@ -246,10 +223,10 @@ qDebug() << "define Q_OS_LINUX";
 }
 
 private:
-	QVector <QPair <QString, QString> > mvectorNamesDicts; // контейнер с именами словарей (папок)
+	QVector <QPair <QString, QString> > mvectorNamesDicts; // контейнер пар с именами папок словарей и имён при выводе
 	QVector <Dictionary*> mvectorPointsToDicts; // контейнер с указателями на словари
-	//QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
-	quint8 mNumberDicts;
+	QVector <QCheckBox*> mvectorPointsToCheckBox; // контейнер с указателями на чек-боксы
+	quint8 mNumberDicts; // количество словарей
 	Ui::DictionarysClass ui;
 };
 

@@ -120,7 +120,7 @@
      <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="text">
-     <string>Общей лексики</string>
+     <string>1</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -139,7 +139,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Компьютерный</string>
+     <string>3</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -155,7 +155,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Политехнический</string>
+     <string>4</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -171,7 +171,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Биологический</string>
+     <string>5</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -187,7 +187,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Разговорной лексики</string>
+     <string>2</string>
     </property>
     <property name="checked">
      <bool>false</bool>
@@ -203,7 +203,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Медицинский</string>
+     <string>6</string>
     </property>
     <property name="checked">
      <bool>false</bool>
