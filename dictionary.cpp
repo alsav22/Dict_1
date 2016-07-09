@@ -16,7 +16,7 @@ Dictionary::Dictionary(const QString& dirName, const QString name) : dirDict(dir
 	{
 		qDebug() << "Error loadData()!";
 	}
-	//getTagForDict(this);
+	//test(this);
 }
 
 QString Dictionary::getName()
@@ -82,17 +82,18 @@ bool Dictionary::loadData()
 	return true;
 }
 
-void getTagForDict(Dictionary* p)
+void test(Dictionary* p)
 {
 	QString str;
-	QStringList strList;
+	//QStringList strList;
 	//QRegExp reg("(</?[a-z]+\\s?/?>)");
-	QRegExp reg("(<k>.+</k>\\n ?<(?!tr))");
+	//QRegExp reg("(<k>.+</k>\\n ?<(?!tr))");
 	QString tag;
-	static int pos = 0;
-
+	static int F = 0;
+	
 	QFile fileIn(p ->fileParseIdx);
-	QString fileName = "file_" + QString::number(pos) + ".txt";
+	QString fileName = "file_" + QString::number(F) + ".txt";
+	++F;
 	QFile fileOut(fileName);
 	if (!fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
 		qDebug() << "Error in getTagForDict(Dictionary* p)!";
@@ -101,25 +102,45 @@ void getTagForDict(Dictionary* p)
 	if (fileIn.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		QTextStream in(&fileIn);
-		int i;
+		quint32 offset;
+		quint32 size;
 		QString temp;
 		while (true)
 		{
 			temp = in.readLine();
 			if (in.atEnd())
 				break;
-			in >> i >> i;
+			in >> offset >> size;
 			in.read(1);
-			if (!temp[0].isLetter())
+			
+			char* buffer = new char[size + 1]; // буфер под перевод
+			p ->mpFileDict ->seek(0);
+			p ->mpFileDict ->seek(offset); // переход к переводу
+			p ->mpFileDict ->read(buffer, size); // чтение перевода
+			buffer[size] = '\0';
+			
+			str = QString::fromUtf8(buffer); // первод в QString из UTF-8
+			
+			delete [] buffer;
+
+			if (temp == "aloha")
 			{
-				out << temp << endl;
-				++pos;
+				//qDebug() << temp << "\n";
+			    //qDebug() << str << "\n";
 			}
-			//str = p ->mpFileDict ->read(i);
-			////str = p ->mpFileDict ->readLine();
-			//if (p ->mpFileDict ->atEnd())
-			//	break;
-			//pos = 0;
+			
+			if (p ->mpFileDict ->atEnd())
+				break;
+
+			QRegExp reg("(<tr>:[^<]+)");
+			//qDebug() << reg.errorString();
+			//int pos = 0;
+			if (reg.indexIn(str) != -1)
+			{
+				tag = reg.cap(0);
+				out << temp << '\n';
+				out << tag << '\n';
+			}
 			//while ((pos = reg.indexIn(str, pos)) != -1)
 			//{
 			//	
@@ -136,7 +157,7 @@ void getTagForDict(Dictionary* p)
 	}
 	//foreach(QString s, strList)
 	//	p ->ui.textEdit ->append(s);//setText(s);
-	qDebug() << "pos = " << pos;
+	//qDebug() << "pos = " << pos;
 	
 }
 
@@ -147,7 +168,9 @@ bool Dictionary::parsingIfo()
 	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		QTextStream in(&fileIn);
-		QTextStream out(&fileOut); 
+		in.setCodec("UTF-8");
+		QTextStream out(&fileOut);
+		out.setCodec("UTF-8");
 		QString str;
 		QString number;
 		while (true)
@@ -186,8 +209,8 @@ bool Dictionary::parsingIdx()
 	if (fileIn.open(QIODevice::ReadOnly) && fileOut.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
 		QDataStream in(&fileIn);
-		QTextStream out(&fileOut); 
-		QString str;
+		QTextStream out(&fileOut);
+		out.setCodec("UTF-8");
 		QByteArray arr;
 		
 		while (!in.atEnd())
@@ -201,15 +224,14 @@ bool Dictionary::parsingIdx()
 			else
 			{
 				if (ch)
-					//str += ch;
 					arr.append(ch);
 				else
 				{
 					quint32 offset;
 					quint32 size;
 					in >> offset >> size;
-					str = QString::fromUtf8(arr.data());
-					out << str << '\n' << offset << " " << size << '\n'; 
+					
+					out << QString::fromUtf8(arr.data()) << '\n' << offset << " " << size << '\n'; 
 					arr.clear();
 				}
 			}
@@ -231,6 +253,7 @@ bool Dictionary::createHash()
 	if (fileIn.open(QIODevice::ReadOnly | QIODevice::Text) && fileOut.open(QIODevice::WriteOnly))
 	{
 		QTextStream in(&fileIn); 
+		in.setCodec("UTF-8");
 		QString str;
 		quint32 offset = 0;
 		quint32 size   = 0;

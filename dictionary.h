@@ -14,7 +14,7 @@ public:
 	QString getName();
 	
 protected:
-	friend void getTagForDict(Dictionary* p);
+	friend void test(Dictionary* p);
 
 private:
 	QHash <QString, QPair <quint32, quint32> > mHash; // хеш для данных из .idx
