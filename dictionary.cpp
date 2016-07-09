@@ -216,7 +216,7 @@ bool Dictionary::parsingIdx()
 		while (!in.atEnd())
 		{
 			char ch ;
-			if (in.readRawData(&ch, 1) == -1)
+			if (in.readRawData(&ch, 1) == -1) 
 			{
 				qDebug() << QWidget::tr("Ошибка чтения из .idx!");
 				return false;
@@ -231,6 +231,7 @@ bool Dictionary::parsingIdx()
 					quint32 size;
 					in >> offset >> size;
 					
+					// QString UTF-16 (из UTF-8) записывается в файл как UTF-8
 					out << QString::fromUtf8(arr.data()) << '\n' << offset << " " << size << '\n'; 
 					arr.clear();
 				}
@@ -259,7 +260,7 @@ bool Dictionary::createHash()
 		quint32 size   = 0;
 		while (true)
 		{
-			str = in.readLine();
+			str = in.readLine(); // читает UTF-8, возвращает UTF-16
 			if (in.atEnd())
 				break;
 			//qDebug() << str;
